@@ -100,12 +100,12 @@ public class ToolView extends ViewPart implements TreeSelectionListener {
 		p4.setScp(scp4);
 		twoSrcPane.setRightComponent(scp4);
 
-		try {
-			parsing.getWorkspaceInfo();
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+		// try {
+		// parsing.getWorkspaceInfo();
+		// } catch (Exception e) {
+		// // TODO 自動生成された catch ブロック
+		// e.printStackTrace();
+		// }
 		lm = new LoadMethod();
 	}
 

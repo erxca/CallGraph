@@ -21,28 +21,28 @@ public class Parsing {
 	static ArrayList<String> srcList = new ArrayList<String>();
 	private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
 
-	public void getWorkspaceInfo() throws JavaModelException {
+	public void getWorkspaceInfo(String packageName) throws JavaModelException {
 		// ワークスペースの参照を取得する
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 
 		// プロジェクトへの参照を取得する
-		IProject[] projects = root.getProjects();
-		// IProject project = root.getProject("sample");
+		// IProject[] projects = root.getProjects();
+		IProject project = root.getProject(packageName);
 
 		// System.out.println(project.exists());
 		// System.out.println(projects.length);
-		for (IProject project : projects) {
-			try {
-				if (project.isNatureEnabled(JDT_NATURE)) {
-					System.out.println("Project Name : " + project.getName());
+		// for (IProject project : projects) {
+		try {
+			if (project.isNatureEnabled(JDT_NATURE)) {
+				System.out.println("Project Name : " + project.getName());
 
-					analyseMethods(project);
-				}
-			} catch (CoreException e) {
-				e.printStackTrace();
+				analyseMethods(project);
 			}
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
+		// }
 		checkMethodCallList();
 	}
 
