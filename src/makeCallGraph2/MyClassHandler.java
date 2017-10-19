@@ -12,10 +12,12 @@ public class MyClassHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
-		System.out.println(selection);
+		// System.out.println(selection);
+
 		String sel = selection.toString();
 		int end = sel.indexOf(".java");
 		String temp = sel.substring(0, end);
+
 		int i, start = 0;
 		if ((i = temp.lastIndexOf("[")) >= 0) {
 			start = i + 1;
@@ -25,8 +27,9 @@ public class MyClassHandler extends AbstractHandler {
 			System.err.println("error!!");
 		}
 		String className = temp.substring(start, temp.length());
+		String fileName = className + ".java";
 
-		System.out.println(className);
+		System.out.println(className + "\t" + fileName);
 		return null;
 	}
 
