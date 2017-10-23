@@ -9,10 +9,10 @@
             id="tool.test">
       </category>
       <view
-            name="%view.name"
+            name="メソッド呼び出し可視化"
             icon="icons/sample.gif"
             category="tool.test"
-            class="view.ToolView"
+            class="view.PluginView"
             id="tool.test.views.TestView">
       </view>
    </extension>

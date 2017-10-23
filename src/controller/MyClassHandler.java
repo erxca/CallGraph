@@ -11,13 +11,13 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class MyClassHandler extends AbstractHandler {
+	Shell shell = Display.getDefault().getActiveShell();
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
-		System.out.println(selection);
-
+		// System.out.println(selection);
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
 		String sel = selection.toString();
@@ -39,7 +39,6 @@ public class MyClassHandler extends AbstractHandler {
 			System.out.println("一致！");
 		} else {
 			// System.err.println("構文解析をしてください。");
-			Shell shell = Display.getDefault().getActiveShell();
 			MessageDialog.openInformation(shell, "error", "構文解析結果がありません。\n構文解析を行ってください");
 		}
 	}
