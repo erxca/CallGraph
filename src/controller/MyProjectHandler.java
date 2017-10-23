@@ -11,6 +11,7 @@ import model.Parsing;
 
 public class MyProjectHandler extends AbstractHandler {
 	private Parsing parsing = new Parsing();
+	static String pjtName = "";
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -18,10 +19,10 @@ public class MyProjectHandler extends AbstractHandler {
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
 		String sel = selection.toString();
 		int idx = sel.indexOf("\n");
-		String pcgName = sel.substring(1, idx); // selは"["から始まっているので
-		// System.out.println(pcgName);
+		pjtName = sel.substring(1, idx); // selは"["から始まっているので
+		// System.out.println(pjtName);
 		try {
-			parsing.getWorkspaceInfo(pcgName);
+			parsing.getWorkspaceInfo(pjtName);
 		} catch (JavaModelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
