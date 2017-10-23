@@ -1,4 +1,4 @@
-package makeCallGraph2;
+package controller;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -7,9 +7,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import getClassName.Parsing;
+import model.Parsing;
 
-public class MyHandler extends AbstractHandler {
+public class MyProjectHandler extends AbstractHandler {
 	private Parsing parsing = new Parsing();
 
 	@Override

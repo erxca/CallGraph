@@ -1,4 +1,4 @@
-package tool.test.views;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,10 +21,10 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import getClassName.Parsing;
 import makeCallGraph.LoadClassName;
 import makeCallGraph.LoadMethod;
 import makeCallGraph.MyPanel;
+import model.Parsing;
 
 public class ToolView extends ViewPart implements TreeSelectionListener {
 	public static JTree tree;

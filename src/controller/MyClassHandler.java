@@ -1,4 +1,4 @@
-package makeCallGraph2;
+package controller;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

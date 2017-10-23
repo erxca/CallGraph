@@ -1,4 +1,4 @@
-package getClassName;
+package model;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
