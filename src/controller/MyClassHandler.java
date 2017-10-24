@@ -10,8 +10,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import model.GetInformation;
+
 public class MyClassHandler extends AbstractHandler {
 	Shell shell = Display.getDefault().getActiveShell();
+	String className;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -24,7 +27,7 @@ public class MyClassHandler extends AbstractHandler {
 		int lineEnd = sel.indexOf("\n");
 		sel = sel.substring(0, lineEnd);
 
-		String className = getClassName(sel);
+		className = getClassName(sel);
 		String fileName = className + ".java";
 		String projectName = getProjectName(sel);
 
@@ -37,6 +40,8 @@ public class MyClassHandler extends AbstractHandler {
 	private void cmpProjectName(String projectName, IWorkbenchWindow window) {
 		if (projectName.equals(MyProjectHandler.pjtName)) {
 			System.out.println("一致！");
+			GetInformation info = new GetInformation();
+			info.getClassInfo(className);
 		} else {
 			// System.err.println("構文解析をしてください。");
 			MessageDialog.openInformation(shell, "error", "構文解析結果がありません。\n構文解析を行ってください");

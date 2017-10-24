@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class ToolVisitor extends ASTVisitor {
-	ArrayList<Class> classList = new ArrayList<Class>(); // クラスをまとめたリスト
+	public static ArrayList<Class> classList = new ArrayList<Class>(); // クラスをまとめたリスト
 	// メソッド呼び出しをまとめたリスト
 	ArrayList<ArrayList<String>> methodCallList = new ArrayList<ArrayList<String>>();
 	ArrayList<Method> methodList = new ArrayList<Method>();
