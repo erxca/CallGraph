@@ -18,9 +18,22 @@ public class MyProjectHandler extends AbstractHandler {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
 		String sel = selection.toString();
-		int idx = sel.indexOf("\n");
-		pjtName = sel.substring(1, idx); // selは"["から始まっているので
-		// System.out.println(pjtName);
+		// System.out.println(sel);
+
+		int idx;
+		if ((idx = sel.indexOf("\n")) > 0) {
+			pjtName = sel.substring(1, idx);
+		} else if ((idx = sel.indexOf("]")) > 0) {
+			pjtName = sel.substring(1, idx);
+
+			if ((idx = pjtName.indexOf(" ")) > 0) {
+				pjtName = pjtName.substring(0, idx);
+			}
+		}
+
+		System.out.println(pjtName);
+		// pjtName = sel.substring(1, idx); // selは"["から始まっているので
+		// // System.out.println(pjtName);
 		try {
 			parsing.getWorkspaceInfo(pjtName);
 		} catch (JavaModelException e) {

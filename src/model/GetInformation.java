@@ -12,14 +12,19 @@ public class GetInformation {
 		methodList = null;
 	}
 
+	// 取得したクラス名がクラスリストにあるか判定
 	public void getClassInfo(String className) {
 		for (Class cls : classList) {
-			if (cls.className.equals(className)) {
+			String pNameDotCName = cls.className;
+			String cName = pNameDotCName.substring(pNameDotCName.lastIndexOf(".") + 1);
+
+			if (cName.equals(className)) {
+				System.out.println(cName);
 				focusClass = cls;
 				methodList = cls.getMethodList();
-			} else {
-				System.err.println("一致するクラスがありません。");
+				return;
 			}
 		}
+		System.out.println("一致するクラスがありません。");
 	}
 }
