@@ -1,10 +1,11 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Toolkit;
 
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -16,6 +17,7 @@ import org.eclipse.ui.part.ViewPart;
 public class PluginView extends ViewPart {
 	ScrolledComposite scrollComposite;
 	Composite composite;
+	Frame f;
 
 	// public ToolView() {
 	// // TODO 自動生成されたコンストラクター・スタブ
@@ -37,21 +39,24 @@ public class PluginView extends ViewPart {
 		scrollComposite.setContent(composite);
 		scrollComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		makeClassCps();
-	}
-
-	public void makeClassCps() {
-
-		Frame f = SWT_AWT.new_Frame(new Composite(composite, SWT.EMBEDDED));
-
+		f = SWT_AWT.new_Frame(new Composite(composite, SWT.EMBEDDED));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int viewW = screenSize.width;
 		int viewH = screenSize.height;
-		f.setBounds(0, 0, viewW, viewH);
+		f.setBounds(0, 0, viewW / 2, viewH / 2);
 
 		System.out.println(f.getSize().getWidth() + " " + f.getSize().getHeight());
+		// makeClassCps();
+	}
 
-		JPanel classP = new JPanel();
+	public void makeClassCps(String className) {
+
+		// クラス名のラベル
+		JLabel lbl = new JLabel();
+		FontMetrics fm = lbl.getFontMetrics(lbl.getFont());
+		int classNameWidth = fm.stringWidth(className);
+
+		// JPanel classP = new JPanel();
 		// Composite pClass = new Composite(composite, SWT.BORDER);
 		// pClass.setLayout(null);
 		// pClass.setBounds(20, 20, 50, 50);
