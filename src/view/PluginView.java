@@ -49,7 +49,7 @@ public class PluginView extends ViewPart {
 		int viewH = screenSize.height;
 		f.setBounds(0, 0, viewW, viewH);
 
-		System.out.println(f.getSize().getWidth() + " ");
+		System.out.println(f.getSize().getWidth() + " " + f.getSize().getHeight());
 
 		JPanel classP = new JPanel();
 		// Composite pClass = new Composite(composite, SWT.BORDER);
