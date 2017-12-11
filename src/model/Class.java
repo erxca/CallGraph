@@ -30,6 +30,10 @@ public class Class {
 		return methodList;
 	}
 
+	public String getClassName() {
+		return className;
+	}
+
 	public void addMethodList(Method method) {
 		methodList.add(method);
 	}

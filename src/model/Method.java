@@ -17,6 +17,10 @@ public class Method {
 		this.modifier = modifier;
 	}
 
+	public String getMethodName() {
+		return methodName;
+	}
+
 	public void addParaList(ITypeBinding[] paras) {
 		for (ITypeBinding itb : paras) {
 			parametersList.add(itb.getName());

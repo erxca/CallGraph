@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import view.PaintComponents;
+
 public class GetInformation {
 	ArrayList<Class> classList = ToolVisitor.classList;
 	Class focusClass;
@@ -22,6 +24,9 @@ public class GetInformation {
 				System.out.println(cName);
 				focusClass = cls;
 				methodList = cls.getMethodList();
+
+				PaintComponents pc = new PaintComponents(view.PluginView.getP(), cls);
+				pc.makeClassCps();
 				return;
 			}
 		}

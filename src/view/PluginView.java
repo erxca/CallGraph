@@ -1,23 +1,24 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Toolkit;
 
-import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 public class PluginView extends ViewPart {
 	ScrolledComposite scrollComposite;
 	Composite composite;
-	Frame f;
+	static Frame f;
+	static JPanel p;
 
 	// public ToolView() {
 	// // TODO 自動生成されたコンストラクター・スタブ
@@ -26,48 +27,57 @@ public class PluginView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		// スクロール可能なコンポジットを作成
-		scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-		// スクロール可能なコンポジットを親とするコンポジットを作成する
-		composite = new Composite(scrollComposite, SWT.BORDER);
-		composite.setLayout(null);
-		composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		// // スクロール可能なコンポジットを作成
+		// scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL |
+		// SWT.H_SCROLL);
+		// // スクロール可能なコンポジットを親とするコンポジットを作成する
+		// composite = new Composite(scrollComposite, SWT.BORDER);
+		// composite.setLayout(null);
+		// composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		//
+		// // スクロールバー設定
+		// scrollComposite.setExpandHorizontal(true);
+		// scrollComposite.setExpandVertical(true);
+		// scrollComposite.setContent(composite);
+		// scrollComposite.setMinSize(composite.computeSize(SWT.DEFAULT,
+		// SWT.DEFAULT));
 
-		// スクロールバー設定
-		scrollComposite.setExpandHorizontal(true);
-		scrollComposite.setExpandVertical(true);
-		scrollComposite.setContent(composite);
-		scrollComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		f = SWT_AWT.new_Frame(new Composite(parent, SWT.EMBEDDED));
 
-		f = SWT_AWT.new_Frame(new Composite(composite, SWT.EMBEDDED));
+		// f.setBackground(Color.black);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int viewW = screenSize.width;
 		int viewH = screenSize.height;
-		f.setBounds(0, 0, viewW / 2, viewH / 2);
 
-		System.out.println(f.getSize().getWidth() + " " + f.getSize().getHeight());
+		p = new JPanel();
+		// p.setLayout(null);
+		p.setOpaque(false);
+		p.setBackground(Color.white);
+		p.setBounds(0, 0, viewW / 2, viewH / 2);
+
+		JScrollPane scp = new JScrollPane();
+		scp.getViewport().setView(p);
+		scp.setBounds(0, 0, viewW / 2, viewH / 2);
+		scp.getViewport().setBackground(Color.white);
+
+		f.add(scp);
+
+		// f.add(p);
+		// FontMetrics fm = f.getFontMetrics(f.getFont());
+
+		// f.setVisible(true);
+		// f.repaint();
+		System.out.println(p.getSize().getWidth() + " " + p.getSize().getHeight());
 		// makeClassCps();
+
 	}
 
-	public void makeClassCps(String className) {
+	public static JPanel getP() {
+		return p;
+	}
 
-		// クラス名のラベル
-		JLabel lbl = new JLabel();
-		FontMetrics fm = lbl.getFontMetrics(lbl.getFont());
-		int classNameWidth = fm.stringWidth(className);
-
-		// JPanel classP = new JPanel();
-		// Composite pClass = new Composite(composite, SWT.BORDER);
-		// pClass.setLayout(null);
-		// pClass.setBounds(20, 20, 50, 50);
-		// pClass.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		// int cpsX = pClass.getSize().x;
-		// int cpsY = pClass.getSize().y;
-		// System.out.println("x :" + cpsX + " y : " + cpsY);
-
-		// Label textLabel = new Label(composite, SWT.BORDER | SWT.CENTER);
-		// textLabel.setText("TextLabel");
-		// textLabel.setBounds(20, 20, 50, 50);
+	public static Frame getF() {
+		return f;
 	}
 
 	@Override
