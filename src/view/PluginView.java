@@ -19,6 +19,7 @@ public class PluginView extends ViewPart {
 	Composite composite;
 	static Frame f;
 	static JPanel p;
+	static JScrollPane scp;
 
 	// public ToolView() {
 	// // TODO 自動生成されたコンストラクター・スタブ
@@ -55,7 +56,7 @@ public class PluginView extends ViewPart {
 		p.setBackground(Color.white);
 		p.setBounds(0, 0, viewW / 2, viewH / 2);
 
-		JScrollPane scp = new JScrollPane();
+		scp = new JScrollPane();
 		scp.getViewport().setView(p);
 		scp.setBounds(0, 0, viewW / 2, viewH / 2);
 		scp.getViewport().setBackground(Color.white);
@@ -78,6 +79,10 @@ public class PluginView extends ViewPart {
 
 	public static Frame getF() {
 		return f;
+	}
+
+	public static JScrollPane getScp() {
+		return scp;
 	}
 
 	@Override

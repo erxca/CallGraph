@@ -15,7 +15,7 @@ import javax.swing.border.LineBorder;
 import model.Class;
 import model.Method;
 
-public class PaintComponents {
+public class MyPanel extends JPanel {
 	JPanel p;
 	Frame f;
 	JScrollPane scp;
@@ -26,11 +26,16 @@ public class PaintComponents {
 	int panelX;
 	ArrayList<JButton> btnList = new ArrayList<JButton>();
 
-	public PaintComponents(Frame f, JPanel p, JScrollPane scp, Class c) {
+	public MyPanel(Frame f, JPanel p, JScrollPane scp, Class c) {
 		this.f = f;
 		this.p = p;
 		this.scp = scp;
 		this.c = c;
+
+		initVariable();
+	}
+
+	private void initVariable() {
 		width = 50;
 		mWidth = 0;
 		cWidth = 0;
