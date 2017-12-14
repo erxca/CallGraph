@@ -7,7 +7,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import model.GetInformation;
@@ -20,8 +22,16 @@ public class MyClassHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
-		// System.out.println(selection);
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+		IWorkbenchPage page = window.getActivePage();
+
+		try {
+			page.showView("org.eclipse.jdt.ui.PackageExplorer");
+			System.out.println(HandlerUtil.getActivePartId(event));
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		String sel = selection.toString();
 		int lineEnd = sel.indexOf("\n");
@@ -33,15 +43,15 @@ public class MyClassHandler extends AbstractHandler {
 
 		System.out.println(className + "\t" + fileName + "\t" + projectName);
 
-		cmpProjectName(projectName, window);
+		cmpProjectName(projectName, page);
 		return null;
 	}
 
-	private void cmpProjectName(String projectName, IWorkbenchWindow window) {
+	private void cmpProjectName(String projectName, IWorkbenchPage page) {
 		if (projectName.equals(MyProjectHandler.pjtName)) {
 			System.out.println("一致！");
 			GetInformation info = new GetInformation();
-			info.getClassInfo(className);
+			info.getClassInfo(className, page);
 		} else {
 			// System.err.println("構文解析をしてください。");
 			MessageDialog.openInformation(shell, "error", "構文解析結果がありません。\n構文解析を行ってください");

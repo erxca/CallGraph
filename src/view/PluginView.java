@@ -28,24 +28,8 @@ public class PluginView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		// // スクロール可能なコンポジットを作成
-		// scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL |
-		// SWT.H_SCROLL);
-		// // スクロール可能なコンポジットを親とするコンポジットを作成する
-		// composite = new Composite(scrollComposite, SWT.BORDER);
-		// composite.setLayout(null);
-		// composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
-		// // スクロールバー設定
-		// scrollComposite.setExpandHorizontal(true);
-		// scrollComposite.setExpandVertical(true);
-		// scrollComposite.setContent(composite);
-		// scrollComposite.setMinSize(composite.computeSize(SWT.DEFAULT,
-		// SWT.DEFAULT));
-
 		f = SWT_AWT.new_Frame(new Composite(parent, SWT.EMBEDDED));
 
-		// f.setBackground(Color.black);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int viewW = screenSize.width;
 		int viewH = screenSize.height;
@@ -57,19 +41,11 @@ public class PluginView extends ViewPart {
 		p.setBounds(0, 0, viewW / 2, viewH / 2);
 
 		scp = new JScrollPane();
-		scp.getViewport().setView(p);
+		scp.getViewport().setView(new MyGraphPanel());
 		scp.setBounds(0, 0, viewW / 2, viewH / 2);
 		scp.getViewport().setBackground(Color.white);
 
 		f.add(scp);
-
-		// f.add(p);
-		// FontMetrics fm = f.getFontMetrics(f.getFont());
-
-		// f.setVisible(true);
-		// f.repaint();
-		System.out.println(p.getSize().getWidth() + " " + p.getSize().getHeight());
-		// makeClassCps();
 
 	}
 
