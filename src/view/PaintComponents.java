@@ -36,7 +36,7 @@ public class PaintComponents {
 		// p.setOpaque(false);
 		// p.setLayout(null);
 		// p.setBounds(0, 0, width, height);
-		p = new MyGraphPanel();
+		p = new MyGraphPanel(page, f);
 		scp.getViewport().setView(p);
 		f.repaint();
 	}

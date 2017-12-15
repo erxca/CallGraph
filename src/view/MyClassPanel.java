@@ -6,7 +6,6 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -16,15 +15,15 @@ import model.Method;
 
 public class MyClassPanel extends JPanel {
 	Frame f;
-	JPanel p;
+	MyGraphPanel p;
 	Class c;
 	JLabel lbl;
 	int width, mWidth, cWidth, cHeight;
 	int panelX;
-	ArrayList<JButton> btnList = new ArrayList<JButton>();
+	ArrayList<MyMethodButton> btnList = new ArrayList<MyMethodButton>();
 	FontMetrics btnFm;
 
-	public MyClassPanel(Frame f, JPanel p, Class c) {
+	public MyClassPanel(Frame f, MyGraphPanel p, Class c) {
 		this.f = f;
 		this.p = p;
 		this.c = c;
@@ -72,7 +71,7 @@ public class MyClassPanel extends JPanel {
 
 		// メソッドボタン
 		for (Method method : c.getMethodList()) {
-			addMethodButtonWidth(method.getMethodName());
+			addMethodButtonWidth(method);
 		}
 
 		width = Math.max(mWidth + 30, cWidth + 20);
@@ -90,14 +89,11 @@ public class MyClassPanel extends JPanel {
 
 	}
 
-	private void addMethodButtonWidth(String methodName) {
+	private void addMethodButtonWidth(Method method) {
 
-		JButton btn = new JButton(methodName);
-		btn.setBackground(Color.white);
-		// ここでactionセットする
+		MyMethodButton btn = new MyMethodButton(p, method, false);
 		btnList.add(btn);
-		btnFm = btn.getFontMetrics(btn.getFont());
-		mWidth += btnFm.stringWidth(methodName) + 50;
+		mWidth += btn.fm.stringWidth(method.getMethodName()) + 50;
 
 	}
 
@@ -105,8 +101,8 @@ public class MyClassPanel extends JPanel {
 
 		int btnX = 20;
 
-		for (JButton btn : btnList) {
-			btn.setBounds(btnX, 40, btnFm.stringWidth(btn.getText()) + 40, 30);
+		for (MyMethodButton btn : btnList) {
+			btn.setting(btnX);
 			btnX += btn.getWidth() + 10;
 			add(btn);
 		}

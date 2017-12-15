@@ -41,7 +41,7 @@ public class PluginView extends ViewPart {
 		p.setBounds(0, 0, viewW / 2, viewH / 2);
 
 		scp = new JScrollPane();
-		scp.getViewport().setView(new MyGraphPanel());
+		scp.getViewport().setView(new MyGraphPanel(null, f));
 		scp.setBounds(0, 0, viewW / 2, viewH / 2);
 		scp.getViewport().setBackground(Color.white);
 
