@@ -41,7 +41,7 @@ public class MyClassPanel extends JPanel {
 
 	private void initPanel() {
 		setName("classPanel");
-		setOpaque(true);
+		setOpaque(false);
 		setBorder(new LineBorder(Color.BLACK, 1));
 		setBackground(Color.white);
 		setLayout(null);
@@ -91,7 +91,7 @@ public class MyClassPanel extends JPanel {
 
 	private void addMethodButtonWidth(Method method) {
 
-		MyMethodButton btn = new MyMethodButton(p, method, false);
+		MyMethodButton btn = new MyMethodButton(p, method, false, 0);
 		btnList.add(btn);
 		mWidth += btn.fm.stringWidth(method.getMethodName()) + 50;
 

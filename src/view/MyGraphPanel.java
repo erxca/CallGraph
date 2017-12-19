@@ -5,8 +5,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -23,6 +27,10 @@ public class MyGraphPanel extends JPanel {
 	ArrayList<MyMethodButton> nodeList = new ArrayList<MyMethodButton>();
 	IWorkbenchPage page;
 	Frame f;
+	int level;
+	final int HALF_BTN_Y = 15;
+	final int BRANK = 60;
+	final int PARENT_CENTER_Y = 100;
 
 	public MyGraphPanel(IWorkbenchPage page, Frame f) {
 
@@ -33,23 +41,43 @@ public class MyGraphPanel extends JPanel {
 
 		this.page = page;
 		this.f = f;
+		this.level = 0;
 
 	}
 
 	public void removeBtn() {
 		for (Component c : getComponents()) {
-			if (c.getName().equals("CalledMehod")) {
+			if (c.getName().equals("CalledMethod")) {
 				remove(c);
 			}
 		}
+
+		nodeList.clear();
+		level = 0;
 	}
 
-	public void makeCalledMethod(ArrayList<Method> mList, int centerX) {
+	public void removeBtn2(int level) {
+
+		Iterator<MyMethodButton> itr = nodeList.iterator();
+		while (itr.hasNext()) {
+			MyMethodButton btn = itr.next();
+			System.out.println("btn  " + btn.getText());
+			if (btn.getLevel() > level) {
+				remove(btn);
+				System.out.println("remove  " + btn.getText());
+				itr.remove();
+			}
+		}
+		this.level = level;
+	}
+
+	public void makeCalledMethod(ArrayList<Method> mList, int centerX, double pY) {
+		level++;
 		int mWidth = 20;
 		for (Method m : mList) {
 
 			System.out.println(m.getMethodName());
-			MyMethodButton btn = new MyMethodButton(this, m, true);
+			MyMethodButton btn = new MyMethodButton(this, m, true, level);
 			nodeList.add(btn);
 			mWidth += btn.fm.stringWidth(m.getMethodName()) + 50;
 		}
@@ -57,9 +85,12 @@ public class MyGraphPanel extends JPanel {
 		int btnX;
 		if ((btnX = centerX - (mWidth + 10) / 2 + 20) > 0) {
 			for (MyMethodButton btn : nodeList) {
-				btn.setting(btnX, 30 + 85 + 45);
-				btnX += btn.getWidth() + 10;
-				add(btn);
+				if (btn.getLevel() == level) {
+					btn.setting(btnX, (PARENT_CENTER_Y - HALF_BTN_Y) + (BRANK + HALF_BTN_Y) * level);
+					btn.setPXY(centerX, pY);
+					btnX += btn.getWidth() + 10;
+					add(btn);
+				}
 			}
 		} else {
 			// パネルサイズでかく
@@ -82,21 +113,20 @@ public class MyGraphPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) { // ノード間の線を引く
-		// if (methodNodeList == null) {
-		// return;
-		// }
+		if (nodeList == null) {
+			return;
+		}
 
 		super.paintComponent(g);
-		// Graphics2D g2 = (Graphics2D) g;
+		Graphics2D g2 = (Graphics2D) g;
 
-		// for (Method node : methodNodeList) {
-		// double x1 = node.getParentMethod().getX1();
-		// double y1 = node.getParentMethod().getY1();
-		// double x2 = node.getX1();
-		// double y2 = node.getY1();
-		// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-		// RenderingHints.VALUE_ANTIALIAS_ON);
-		// g2.draw(new Line2D.Double(x1, y1 + 15, x2, y2 - 15));
-		// }
+		for (MyMethodButton btn : nodeList) {
+			double x1 = btn.getMyX();
+			double y1 = btn.getMyY();
+			double x2 = btn.getpX();
+			double y2 = btn.getpY();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.draw(new Line2D.Double(x1, y1, x2, y2));
+		}
 	}
 }

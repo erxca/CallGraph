@@ -31,6 +31,10 @@ public class Method {
 		return methodCallList;
 	}
 
+	public String getDeclaringClassName() {
+		return declaringClassName;
+	}
+
 	public void showMethod() {
 		System.out.println("\n*** Show Method ***");
 		System.out.println("ClassName\t\t: " + declaringClassName);
