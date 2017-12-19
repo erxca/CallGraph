@@ -24,7 +24,6 @@ public class ToolVisitor extends ASTVisitor {
 		if (focusClass != null) {
 			focusClass.showMethodList();
 		}
-		// Print.printTitle("クラス宣言");
 
 		ITypeBinding typeBinding = node.resolveBinding();// 詳細な情報をITypeBindingインスタンスを使って取得したい
 		ITypeBinding superClass = typeBinding.getSuperclass();// 親クラスの取得
@@ -33,22 +32,9 @@ public class ToolVisitor extends ASTVisitor {
 		int modifiers = typeBinding.getModifiers();// "public static"とかの識別子
 		boolean isInterface = typeBinding.isInterface();
 
-		// if (isInterface) {
-		// Print.printMessage("InterfaceName", className);
-		// } else {
-		// Print.printMessage("ClassName", className);
-		// }
-		// Print.printModifiers("Modifiers", modifiers);
-		// System.out.println(node.getModifiers());
-		// System.out.println("修飾子 : " +
-		// Modifier.toString(node.getModifiers()));
 		if (superClass != null) {
-			// Print.printMessage("SuperClass", superClass.getBinaryName());
 			superClassName = superClass.getBinaryName();
 		}
-		// if (interfaces.length != 0) {
-		// Print.printMessage("Interfaces", interfaces);
-		// }
 
 		Class clasS = new Class(className, isInterface, Modifier.toString(modifiers), superClassName);
 		if (interfaces.length != 0) {
@@ -69,17 +55,6 @@ public class ToolVisitor extends ASTVisitor {
 		if (focusMethod != null) {
 			focusMethod.showCallList();
 		}
-		// Print.printTitle("メソッド宣言");
-		// System.out.println("クラス名 : " +
-		// node.resolveBinding().getDeclaringClass().getBinaryName());
-		// Print.printMessage("MethodName",
-		// node.getName().getFullyQualifiedName());
-		// Print.printModifiers("Modifiers", node.getModifiers());
-		// System.out.println(node.getModifiers());
-		// System.out.println("修飾子 : " +
-		// Modifier.toString(node.getModifiers()));
-		// Print.printMessage("ReturnType", node.getReturnType2() + "");
-		// Print.printMessage("Parameters", node.parameters().toString());
 
 		String methodName = node.getName().getFullyQualifiedName();
 		String declaringClassName = node.resolveBinding().getDeclaringClass().getBinaryName();
@@ -98,7 +73,6 @@ public class ToolVisitor extends ASTVisitor {
 
 	public boolean visit(MethodInvocation node) {
 		IMethodBinding methodBinding = node.resolveMethodBinding();
-		// System.out.println(methodBinding.getDeclaringClass());
 		String methodName = methodBinding.getName();
 		String declaringClassName = methodBinding.getDeclaringClass().getBinaryName();
 
@@ -106,14 +80,6 @@ public class ToolVisitor extends ASTVisitor {
 		method.addParaList(methodBinding.getParameterTypes());
 
 		focusMethod.methodCallList.add(method);
-		// System.out.println("メソッドのクラスが知りたい : " +
-		// methodBinding.getDeclaringClass().getBinaryName());
-		// System.out.println("メソッド名が知りたい : " + methodBinding.getName());
-		// System.out.println("メソッドの引数の数: " +
-		// methodBinding.getParameterTypes().length);
-		// for (ITypeBinding itb : methodBinding.getParameterTypes()) {
-		// System.out.println("itbの値だよ : " + itb.getName().toString());
-		// }
 		return super.visit(node);
 
 	}

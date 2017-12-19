@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -44,19 +43,19 @@ public class MyGraphPanel extends JPanel {
 		this.level = 0;
 
 	}
+	//
+	// public void removeBtn() {
+	// for (Component c : getComponents()) {
+	// if (c.getName().equals("CalledMethod")) {
+	// remove(c);
+	// }
+	// }
+	//
+	// nodeList.clear();
+	// level = 0;
+	// }
 
-	public void removeBtn() {
-		for (Component c : getComponents()) {
-			if (c.getName().equals("CalledMethod")) {
-				remove(c);
-			}
-		}
-
-		nodeList.clear();
-		level = 0;
-	}
-
-	public void removeBtn2(int level) {
+	public void removeBtn(int level) {
 
 		Iterator<MyMethodButton> itr = nodeList.iterator();
 		while (itr.hasNext()) {
@@ -82,22 +81,32 @@ public class MyGraphPanel extends JPanel {
 			mWidth += btn.fm.stringWidth(m.getMethodName()) + 50;
 		}
 
-		int btnX;
-		if ((btnX = centerX - (mWidth + 10) / 2 + 20) > 0) {
-			for (MyMethodButton btn : nodeList) {
-				if (btn.getLevel() == level) {
-					btn.setting(btnX, (PARENT_CENTER_Y - HALF_BTN_Y) + (BRANK + HALF_BTN_Y) * level);
-					btn.setPXY(centerX, pY);
-					btnX += btn.getWidth() + 10;
-					add(btn);
-				}
-			}
-		} else {
-			// パネルサイズでかく
-		}
-		// invalidate();
-		// f.validate();
+		checkLeftEnd(centerX, pY, mWidth);
+		checkRightEnd(centerX, pY, mWidth);
+
+		invalidate();
+		f.validate();
 		repaint();
+	}
+
+	private void checkLeftEnd(int centerX, double pY, int mWidth) { // 左端がはみ出ていないかチェックしてノードを配置
+		int btnX = (btnX = centerX - (mWidth + 10) / 2 + 20) > 0 ? btnX : 20;
+
+		for (MyMethodButton btn : nodeList) {
+			if (btn.getLevel() == level) {
+				btn.setting(btnX, (PARENT_CENTER_Y - HALF_BTN_Y) + (BRANK + HALF_BTN_Y) * level);
+				btn.setPXY(centerX, pY);
+				btnX += btn.getWidth() + 10;
+				add(btn);
+			}
+		}
+	}
+
+	private void checkRightEnd(int centerX, double pY, int mWidth) { // 右端がはみ出ていないかチェック
+		int methodRightEnd = centerX + mWidth / 2 + 20;
+		if (methodRightEnd > getWidth()) {
+			setPreferredSize(new Dimension(methodRightEnd, getHeight()));
+		}
 	}
 
 	public void changeViewFocus() {

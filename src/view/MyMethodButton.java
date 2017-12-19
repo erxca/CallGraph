@@ -41,7 +41,7 @@ public class MyMethodButton extends JButton {
 
 	public void setting(int x) {
 		setBounds(x, P_METHOD_Y, nameWidth + 40, 30);
-		setMyXY(x, P_METHOD_Y + (nameWidth + 40) / 2);
+		setMyXY(x, P_METHOD_Y + getBounds().getHeight() / 2);
 	}
 
 	public void setting(int x, int y) {
@@ -54,11 +54,11 @@ public class MyMethodButton extends JButton {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				p.removeBtn2(level);
+				p.removeBtn(level);
 				if (level == 0) {
 					p.makeCalledMethod(m.getMethodCallList(),
 							(int) (getBounds().getCenterX() + getParent().getBounds().getX()),
-							getBounds().getMaxY() + CLASS_PANEL_Y);
+							getBounds().getMaxY() + getParent().getBounds().getY());
 				} else {
 					p.makeCalledMethod(m.getMethodCallList(), (int) getBounds().getCenterX(), getBounds().getMaxY());
 				}
