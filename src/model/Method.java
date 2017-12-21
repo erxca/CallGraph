@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
@@ -10,6 +12,7 @@ public class Method {
 	String modifier;
 	ArrayList<String> parametersList = new ArrayList<String>();
 	ArrayList<Method> methodCallList = new ArrayList<Method>();
+	Set<Method> methodCallSet = new HashSet<>();
 
 	Method(String methodName, String declaringClassName, String modifier) {
 		this.methodName = methodName;
@@ -33,6 +36,16 @@ public class Method {
 
 	public String getDeclaringClassName() {
 		return declaringClassName;
+	}
+
+	public void list2Set() {
+		for (Method method : methodCallList) {
+			methodCallSet.add(method);
+		}
+	}
+
+	public Set<Method> getMethodCallSet() {
+		return methodCallSet;
 	}
 
 	public void showMethod() {

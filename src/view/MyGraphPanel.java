@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -27,6 +28,9 @@ public class MyGraphPanel extends JPanel {
 	IWorkbenchPage page;
 	Frame f;
 	int level;
+	private Color colorList[] = { Color.pink, Color.yellow, Color.cyan, Color.magenta, Color.orange, Color.green };
+	private int colorNum = 0;
+
 	final int HALF_BTN_Y = 15;
 	final int BRANK = 60;
 	final int PARENT_CENTER_Y = 100;
@@ -43,17 +47,6 @@ public class MyGraphPanel extends JPanel {
 		this.level = 0;
 
 	}
-	//
-	// public void removeBtn() {
-	// for (Component c : getComponents()) {
-	// if (c.getName().equals("CalledMethod")) {
-	// remove(c);
-	// }
-	// }
-	//
-	// nodeList.clear();
-	// level = 0;
-	// }
 
 	public void removeBtn(int level) {
 
@@ -70,10 +63,10 @@ public class MyGraphPanel extends JPanel {
 		this.level = level;
 	}
 
-	public void makeCalledMethod(ArrayList<Method> mList, int centerX, double pY) {
+	public void makeCalledMethod(Set<Method> mSet, int centerX, double pY) {
 		level++;
 		int mWidth = 20;
-		for (Method m : mList) {
+		for (Method m : mSet) {
 
 			System.out.println(m.getMethodName());
 			MyMethodButton btn = new MyMethodButton(this, m, true, level);
@@ -106,6 +99,16 @@ public class MyGraphPanel extends JPanel {
 		int methodRightEnd = centerX + mWidth / 2 + 20;
 		if (methodRightEnd > getWidth()) {
 			setPreferredSize(new Dimension(methodRightEnd, getHeight()));
+		}
+	}
+
+	private void checkSameMethod(MyMethodButton m) {
+		for (MyMethodButton node : nodeList) {
+			if (m.getText().equals(node.getText())) {
+				m.setBackground(colorList[colorNum]);
+				node.setBackground(colorList[colorNum]);
+				colorNum++;
+			}
 		}
 	}
 

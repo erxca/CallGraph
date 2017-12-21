@@ -96,6 +96,7 @@ public class Parsing {
 					itr.remove();
 				}
 			}
+			method.list2Set();
 			method.showCallList();
 		}
 	}

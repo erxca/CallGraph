@@ -56,11 +56,11 @@ public class MyMethodButton extends JButton {
 			public void actionPerformed(ActionEvent e) {
 				p.removeBtn(level);
 				if (level == 0) {
-					p.makeCalledMethod(m.getMethodCallList(),
+					p.makeCalledMethod(m.getMethodCallSet(),
 							(int) (getBounds().getCenterX() + getParent().getBounds().getX()),
 							getBounds().getMaxY() + getParent().getBounds().getY());
 				} else {
-					p.makeCalledMethod(m.getMethodCallList(), (int) getBounds().getCenterX(), getBounds().getMaxY());
+					p.makeCalledMethod(m.getMethodCallSet(), (int) getBounds().getCenterX(), getBounds().getMaxY());
 				}
 			}
 
