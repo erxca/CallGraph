@@ -45,6 +45,7 @@ public class PaintComponents {
 
 		init();
 		MyClassPanel cp = new MyClassPanel(f, p, c);
+		p.setCp(cp);
 		p.add(cp);
 		p.setVisible(true);
 

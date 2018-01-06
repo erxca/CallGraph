@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.border.LineBorder;
 
+import controller.MyButtonListener;
 import model.Method;
 
 public class MyMethodButton extends JButton {
@@ -16,6 +18,7 @@ public class MyMethodButton extends JButton {
 	int nameWidth;
 	int level;
 	double pX, pY, myX, myY;
+	int colorNum = -1;
 
 	final int P_METHOD_Y = 40;
 	final int HEIGHT = 30;
@@ -29,6 +32,7 @@ public class MyMethodButton extends JButton {
 		setText(name);
 		setBackground(Color.white);
 		addAction();
+		addMouseListener(new MyButtonListener(m.getDeclaringClassName()));
 
 		fm = this.getFontMetrics(this.getFont());
 		nameWidth = fm.stringWidth(name);
@@ -55,7 +59,11 @@ public class MyMethodButton extends JButton {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				p.removeBtn(level);
+				if (m.getMethodCallSet().size() == 0) {
+					setBorder(new LineBorder(Color.black, 2));
+				}
 				if (level == 0) {
+					p.initList();
 					p.makeCalledMethod(m.getMethodCallSet(),
 							(int) (getBounds().getCenterX() + getParent().getBounds().getX()),
 							getBounds().getMaxY() + getParent().getBounds().getY());
@@ -65,6 +73,18 @@ public class MyMethodButton extends JButton {
 			}
 
 		});
+	}
+
+	public boolean equals(MyMethodButton btn) {
+		if (this.m.equals(btn.getM())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public Method getM() {
+		return m;
 	}
 
 	public int getLevel() {
@@ -95,6 +115,19 @@ public class MyMethodButton extends JButton {
 
 	public double getMyY() {
 		return myY;
+	}
+
+	public int getColorNum() {
+		return colorNum;
+	}
+
+	public void setColorNum(int colorNum) {
+		this.colorNum = colorNum;
+	}
+
+	public void setBgColor(int colorNum) {
+		setBackground(p.colorList[colorNum]);
+		this.colorNum = colorNum;
 	}
 
 }

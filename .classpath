@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/eclipse/plugins/org.eclipse.e4.core.di.jar"/>
 	<classpathentry kind="lib" path="C:/eclipse/plugins/org.eclipse.osgi-3.7.0.jar"/>
 	<classpathentry kind="lib" path="C:/eclipse/plugins/org.osgi.core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/org.eclipse.ui.ide-3.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

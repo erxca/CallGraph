@@ -25,10 +25,12 @@ public class MyGraphPanel extends JPanel {
 	int viewW = screenSize.width;
 	int viewH = screenSize.height;
 	ArrayList<MyMethodButton> nodeList = new ArrayList<MyMethodButton>();
+	ArrayList<MyMethodButton> allNodeList = new ArrayList<MyMethodButton>();
 	IWorkbenchPage page;
 	Frame f;
+	MyClassPanel cp;
 	int level;
-	private Color colorList[] = { Color.pink, Color.yellow, Color.cyan, Color.magenta, Color.orange, Color.green };
+	public Color colorList[] = { Color.pink, Color.yellow, Color.cyan, Color.magenta, Color.orange, Color.green };
 	private int colorNum = 0;
 
 	final int HALF_BTN_Y = 15;
@@ -56,11 +58,35 @@ public class MyGraphPanel extends JPanel {
 			System.out.println("btn  " + btn.getText());
 			if (btn.getLevel() > level) {
 				remove(btn);
+
 				System.out.println("remove  " + btn.getText());
 				itr.remove();
+				nodeList.remove(btn);
+
+				ArrayList<MyMethodButton> sameMethod = new ArrayList<MyMethodButton>();
+				for (MyMethodButton mNode : nodeList) {
+					if (btn.equals(mNode)) {
+						sameMethod.add(mNode);
+					}
+				}
+
+				if (sameMethod.size() == 1) {
+					sameMethod.get(0).setBackground(Color.white);
+					sameMethod.get(0).setColorNum(-1);
+					colorNum--;
+				}
 			}
 		}
 		this.level = level;
+	}
+
+	public void initList() {
+		nodeList.clear();
+		allNodeList.clear();
+
+		for (MyMethodButton btn : cp.btnList) {
+			nodeList.add(btn);
+		}
 	}
 
 	public void makeCalledMethod(Set<Method> mSet, int centerX, double pY) {
@@ -70,8 +96,11 @@ public class MyGraphPanel extends JPanel {
 
 			System.out.println(m.getMethodName());
 			MyMethodButton btn = new MyMethodButton(this, m, true, level);
+			checkSameMethod(btn);
 			nodeList.add(btn);
+			allNodeList.add(btn);
 			mWidth += btn.fm.stringWidth(m.getMethodName()) + 50;
+
 		}
 
 		checkLeftEnd(centerX, pY, mWidth);
@@ -86,7 +115,7 @@ public class MyGraphPanel extends JPanel {
 		int btnX = (btnX = centerX - (mWidth + 10) / 2 + 20) > 0 ? btnX : 20;
 
 		for (MyMethodButton btn : nodeList) {
-			if (btn.getLevel() == level) {
+			if (btn.getLevel() > 0 && btn.getLevel() == level) {
 				btn.setting(btnX, (PARENT_CENTER_Y - HALF_BTN_Y) + (BRANK + HALF_BTN_Y) * level);
 				btn.setPXY(centerX, pY);
 				btnX += btn.getWidth() + 10;
@@ -104,10 +133,21 @@ public class MyGraphPanel extends JPanel {
 
 	private void checkSameMethod(MyMethodButton m) {
 		for (MyMethodButton node : nodeList) {
-			if (m.getText().equals(node.getText())) {
-				m.setBackground(colorList[colorNum]);
-				node.setBackground(colorList[colorNum]);
-				colorNum++;
+			if (m.equals(node)) {
+				int nCnum;
+				if ((nCnum = node.getColorNum()) >= 0) {
+					// m.setBackground(colorList[nCnum]);
+					// m.setColorNum(nCnum);
+					m.setBgColor(nCnum);
+				} else {
+					m.setBgColor(colorNum);
+					node.setBgColor(colorNum);
+					// m.setBackground(colorList[colorNum]);
+					// node.setBackground(colorList[colorNum]);
+					// m.setColorNum(colorNum);
+					// node.setColorNum(colorNum);
+					colorNum++;
+				}
 			}
 		}
 	}
@@ -123,22 +163,31 @@ public class MyGraphPanel extends JPanel {
 
 	}
 
+	public void setCp(MyClassPanel cp) {
+		this.cp = cp;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) { // ノード間の線を引く
 		if (nodeList == null) {
 			return;
 		}
+		// else if (nodeList.get(nodeList.size()).getLevel() == 0) {
+		// return;
+		// }
 
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
 		for (MyMethodButton btn : nodeList) {
-			double x1 = btn.getMyX();
-			double y1 = btn.getMyY();
-			double x2 = btn.getpX();
-			double y2 = btn.getpY();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.draw(new Line2D.Double(x1, y1, x2, y2));
+			if (btn.getLevel() > 0) {
+				double x1 = btn.getMyX();
+				double y1 = btn.getMyY();
+				double x2 = btn.getpX();
+				double y2 = btn.getpY();
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.draw(new Line2D.Double(x1, y1, x2, y2));
+			}
 		}
 	}
 }
