@@ -21,9 +21,9 @@ public class ToolVisitor extends ASTVisitor {
 	public boolean visit(TypeDeclaration node) {
 		String superClassName = null;
 
-		if (focusClass != null) {
-			focusClass.showMethodList();
-		}
+		// if (focusClass != null) {
+		// focusClass.showMethodList();
+		// }
 
 		ITypeBinding typeBinding = node.resolveBinding();// 詳細な情報をITypeBindingインスタンスを使って取得したい
 		ITypeBinding superClass = typeBinding.getSuperclass();// 親クラスの取得
@@ -40,7 +40,7 @@ public class ToolVisitor extends ASTVisitor {
 		if (interfaces.length != 0) {
 			clasS.addInterfaces(interfaces);
 		}
-		clasS.showClass();
+		// clasS.showClass();
 
 		classList.add(clasS);
 		focusClass = clasS;
@@ -52,9 +52,9 @@ public class ToolVisitor extends ASTVisitor {
 	 * メソッド宣言が見つかると呼ばれるメソッド
 	 */
 	public boolean visit(MethodDeclaration node) {
-		if (focusMethod != null) {
-			focusMethod.showCallList();
-		}
+		// if (focusMethod != null) {
+		// focusMethod.showCallList();
+		// }
 
 		String methodName = node.getName().getFullyQualifiedName();
 		String declaringClassName = node.resolveBinding().getDeclaringClass().getBinaryName();
@@ -64,7 +64,7 @@ public class ToolVisitor extends ASTVisitor {
 		method.addParaList(node.resolveBinding().getParameterTypes());
 		methodList.add(method);
 
-		method.showMethod();
+		// method.showMethod();
 		focusClass.addMethodList(method);
 		focusMethod = method;
 

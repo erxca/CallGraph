@@ -69,7 +69,7 @@ public class Parsing {
 
 			parse.accept(visitor);
 
-			System.out.println("***\t\tEND\t\t***");
+			// System.out.println("***\t\tEND\t\t***");
 		}
 	}
 
@@ -92,12 +92,13 @@ public class Parsing {
 				}
 
 				if (!isExist) {
-					System.out.println("delete this method : " + mthd.methodName);
+					// System.out.println("delete this method : " +
+					// mthd.methodName);
 					itr.remove();
 				}
 			}
 			method.list2Set();
-			method.showCallList();
+			// method.showCallList();
 		}
 	}
 
