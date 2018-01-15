@@ -10,6 +10,7 @@ public class Method {
 	String methodName;
 	String declaringClassName;
 	String modifier;
+	String path;
 	ArrayList<String> parametersList = new ArrayList<String>();
 	ArrayList<Method> methodCallList = new ArrayList<Method>();
 	Set<Method> methodCallSet = new HashSet<>();
@@ -18,10 +19,25 @@ public class Method {
 		this.methodName = methodName;
 		this.declaringClassName = declaringClassName;
 		this.modifier = modifier;
+		this.path = null;
 	}
 
 	public String getMethodName() {
 		return methodName;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String pkgPath) {
+		String className = declaringClassName.substring(declaringClassName.lastIndexOf(".") + 1);
+		StringBuffer sb = new StringBuffer();
+		sb.append(pkgPath);
+		sb.append("/");
+		sb.append(className);
+		sb.append(".java");
+		this.path = sb.toString();
 	}
 
 	public void addParaList(ITypeBinding[] paras) {

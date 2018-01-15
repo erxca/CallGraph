@@ -54,6 +54,7 @@ public class Parsing {
 
 			// パッケージの中身がソースコードのとき
 			if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
+
 				System.out.println("Package Name : " + mypackage.getElementName());
 				createAST(mypackage);
 			}
@@ -62,6 +63,7 @@ public class Parsing {
 	}
 
 	private void createAST(IPackageFragment mypackage) throws JavaModelException {
+		String pkgPath = mypackage.getPath().toString();
 		for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
 
 			// ICompilationUnits用のASTを作成
@@ -70,6 +72,11 @@ public class Parsing {
 			parse.accept(visitor);
 
 			// System.out.println("***\t\tEND\t\t***");
+			for (Method method : visitor.methodList) {
+				if (method.getPath() == null) {
+					method.setPath(pkgPath);
+				}
+			}
 		}
 	}
 

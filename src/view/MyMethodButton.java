@@ -32,7 +32,7 @@ public class MyMethodButton extends JButton {
 		setText(name);
 		setBackground(Color.white);
 		addAction();
-		addMouseListener(new MyButtonListener(m.getDeclaringClassName()));
+		addMouseListener(new MyButtonListener(m.getPath()));
 
 		fm = this.getFontMetrics(this.getFont());
 		nameWidth = fm.stringWidth(name);

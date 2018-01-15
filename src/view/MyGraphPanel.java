@@ -55,11 +55,11 @@ public class MyGraphPanel extends JPanel {
 		Iterator<MyMethodButton> itr = nodeList.iterator();
 		while (itr.hasNext()) {
 			MyMethodButton btn = itr.next();
-			System.out.println("btn  " + btn.getText());
+			// System.out.println("btn " + btn.getText());
 			if (btn.getLevel() > level) {
 				remove(btn);
 
-				System.out.println("remove  " + btn.getText());
+				// System.out.println("remove " + btn.getText());
 				itr.remove();
 				nodeList.remove(btn);
 
@@ -94,7 +94,7 @@ public class MyGraphPanel extends JPanel {
 		int mWidth = 20;
 		for (Method m : mSet) {
 
-			System.out.println(m.getMethodName());
+			// System.out.println(m.getMethodName());
 			MyMethodButton btn = new MyMethodButton(this, m, true, level);
 			checkSameMethod(btn);
 			nodeList.add(btn);

@@ -17,17 +17,18 @@ import model.GetInformation;
 public class MyClassHandler extends AbstractHandler {
 	Shell shell = Display.getDefault().getActiveShell();
 	String className;
+	public static IWorkbenchPage page;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		IWorkbenchPage page = window.getActivePage();
+		page = window.getActivePage();
 
 		try {
 			page.showView("org.eclipse.jdt.ui.PackageExplorer");
-			System.out.println(HandlerUtil.getActivePartId(event));
+			// System.out.println(HandlerUtil.getActivePartId(event));
 		} catch (PartInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,10 +39,10 @@ public class MyClassHandler extends AbstractHandler {
 		sel = sel.substring(0, lineEnd);
 
 		className = getClassName(sel);
-		String fileName = className + ".java";
+		// String fileName = className + ".java";
 		String projectName = getProjectName(sel);
 
-		System.out.println(className + "\t" + fileName + "\t" + projectName);
+		// System.out.println(className + "\t" + fileName + "\t" + projectName);
 
 		cmpProjectName(projectName, page);
 		return null;
@@ -49,7 +50,7 @@ public class MyClassHandler extends AbstractHandler {
 
 	private void cmpProjectName(String projectName, IWorkbenchPage page) {
 		if (projectName.equals(MyProjectHandler.pjtName)) {
-			System.out.println("一致！");
+			// System.out.println("一致！");
 			GetInformation info = new GetInformation();
 			info.getClassInfo(className, page);
 		} else {
