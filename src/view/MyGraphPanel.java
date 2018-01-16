@@ -24,8 +24,8 @@ public class MyGraphPanel extends JPanel {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	int viewW = screenSize.width;
 	int viewH = screenSize.height;
-	ArrayList<MyMethodButton> nodeList = new ArrayList<MyMethodButton>();
-	ArrayList<MyMethodButton> allNodeList = new ArrayList<MyMethodButton>();
+	ArrayList<MyMethodButton> nodeList = new ArrayList<MyMethodButton>(); // クラスパネル内のメソッドを含めない
+	ArrayList<MyMethodButton> allNodeList = new ArrayList<MyMethodButton>(); // クラスパネル内のメソッドを含める
 	IWorkbenchPage page;
 	Frame f;
 	MyClassPanel cp;
@@ -57,27 +57,32 @@ public class MyGraphPanel extends JPanel {
 			MyMethodButton btn = itr.next();
 			// System.out.println("btn " + btn.getText());
 			if (btn.getLevel() > level) {
-				remove(btn);
 
-				// System.out.println("remove " + btn.getText());
+				remove(btn);
 				itr.remove();
 				nodeList.remove(btn);
 
-				ArrayList<MyMethodButton> sameMethod = new ArrayList<MyMethodButton>();
-				for (MyMethodButton mNode : nodeList) {
-					if (btn.equals(mNode)) {
-						sameMethod.add(mNode);
-					}
-				}
+				// 消したノードと同じ色のノードの色の変更
+				changeBgColor(btn);
 
-				if (sameMethod.size() == 1) {
-					sameMethod.get(0).setBackground(Color.white);
-					sameMethod.get(0).setColorNum(-1);
-					colorNum--;
-				}
 			}
 		}
 		this.level = level;
+	}
+
+	private void changeBgColor(MyMethodButton btn) {
+		ArrayList<MyMethodButton> sameMethod = new ArrayList<MyMethodButton>();
+		for (MyMethodButton mNode : nodeList) {
+			if (btn.equals(mNode)) {
+				sameMethod.add(mNode);
+			}
+		}
+
+		if (sameMethod.size() == 1) {
+			sameMethod.get(0).setBackground(Color.white);
+			sameMethod.get(0).setColorNum(-1);
+			colorNum--;
+		}
 	}
 
 	public void initList() {
@@ -94,7 +99,6 @@ public class MyGraphPanel extends JPanel {
 		int mWidth = 20;
 		for (Method m : mSet) {
 
-			// System.out.println(m.getMethodName());
 			MyMethodButton btn = new MyMethodButton(this, m, true, level);
 			checkSameMethod(btn);
 			nodeList.add(btn);
@@ -136,16 +140,10 @@ public class MyGraphPanel extends JPanel {
 			if (m.equals(node)) {
 				int nCnum;
 				if ((nCnum = node.getColorNum()) >= 0) {
-					// m.setBackground(colorList[nCnum]);
-					// m.setColorNum(nCnum);
 					m.setBgColor(nCnum);
 				} else {
 					m.setBgColor(colorNum);
 					node.setBgColor(colorNum);
-					// m.setBackground(colorList[colorNum]);
-					// node.setBackground(colorList[colorNum]);
-					// m.setColorNum(colorNum);
-					// node.setColorNum(colorNum);
 					colorNum++;
 				}
 			}
@@ -172,9 +170,6 @@ public class MyGraphPanel extends JPanel {
 		if (nodeList == null) {
 			return;
 		}
-		// else if (nodeList.get(nodeList.size()).getLevel() == 0) {
-		// return;
-		// }
 
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;

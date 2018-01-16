@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.eclipse.ui.IWorkbenchPage;
@@ -20,25 +19,21 @@ public class PaintComponents {
 	ArrayList<JButton> btnList = new ArrayList<JButton>();
 	IWorkbenchPage page;
 
-	public PaintComponents(Frame f, JPanel p, JScrollPane scp, IWorkbenchPage page, Class c) {
+	public PaintComponents(Frame f, JScrollPane scp, IWorkbenchPage page, Class c) {
+
 		this.f = f;
-		// this.p = p;
 		this.scp = scp;
 		this.c = c;
 		this.page = page;
+
 	}
 
 	private void init() {
-		// f.remove(p);
-		// int width = p.getWidth();
-		// int height = p.getHeight();
-		// p = new JPanel();
-		// p.setOpaque(false);
-		// p.setLayout(null);
-		// p.setBounds(0, 0, width, height);
+
 		p = new MyGraphPanel(page, f);
 		scp.getViewport().setView(p);
 		f.repaint();
+
 	}
 
 	public void makeClassCps() {

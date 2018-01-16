@@ -21,10 +21,6 @@ public class ToolVisitor extends ASTVisitor {
 	public boolean visit(TypeDeclaration node) {
 		String superClassName = null;
 
-		// if (focusClass != null) {
-		// focusClass.showMethodList();
-		// }
-
 		ITypeBinding typeBinding = node.resolveBinding();// 詳細な情報をITypeBindingインスタンスを使って取得したい
 		ITypeBinding superClass = typeBinding.getSuperclass();// 親クラスの取得
 		ITypeBinding[] interfaces = typeBinding.getInterfaces();// インターフェースの取得

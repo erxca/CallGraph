@@ -21,10 +21,6 @@ public class PluginView extends ViewPart {
 	static JPanel p;
 	static JScrollPane scp;
 
-	// public ToolView() {
-	// // TODO 自動生成されたコンストラクター・スタブ
-	// }
-
 	@Override
 	public void createPartControl(Composite parent) {
 
@@ -35,7 +31,6 @@ public class PluginView extends ViewPart {
 		int viewH = screenSize.height;
 
 		p = new JPanel();
-		// p.setLayout(null);
 		p.setOpaque(false);
 		p.setBackground(Color.white);
 		p.setBounds(0, 0, viewW / 2, viewH / 2);

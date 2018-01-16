@@ -27,8 +27,7 @@ public class GetInformation {
 				focusClass = cls;
 				methodList = cls.getMethodList();
 
-				PaintComponents pc = new PaintComponents(view.PluginView.getF(), view.PluginView.getP(),
-						view.PluginView.getScp(), page, cls);
+				PaintComponents pc = new PaintComponents(view.PluginView.getF(), view.PluginView.getScp(), page, cls);
 				pc.makeClassCps();
 				return;
 			}
