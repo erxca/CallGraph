@@ -22,7 +22,7 @@ public class Parsing {
 	private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
 
 	public void getWorkspaceInfo(String packageName) throws JavaModelException {
-		// ワークスペースの参照を取得する
+		// ワークスペースの参照を取得す る
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 
