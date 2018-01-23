@@ -6,14 +6,16 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import model.Method;
+
 public class MyButtonListener extends MouseAdapter {
 	private JPopupMenu popup;
 
-	public MyButtonListener(String classPath) {
+	public MyButtonListener(Method m) {
 
 		popup = new JPopupMenu();
 		JMenuItem view1 = new JMenuItem("エディタに表示");
-		view1.addMouseListener(new MyButtonAdapter(classPath));
+		view1.addMouseListener(new MyButtonAdapter(m));
 		popup.add(view1);
 
 	}

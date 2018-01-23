@@ -76,6 +76,9 @@ public class Parsing {
 				if (method.getPath() == null) {
 					method.setPath(pkgPath);
 				}
+				if (method.getStartLine() < 0) {
+					method.setStartLine(parse.getLineNumber(method.start));
+				}
 			}
 		}
 	}

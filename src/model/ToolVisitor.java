@@ -60,6 +60,9 @@ public class ToolVisitor extends ASTVisitor {
 		method.addParaList(node.resolveBinding().getParameterTypes());
 		methodList.add(method);
 
+		int start = node.getStartPosition();
+		method.setStart(start);
+
 		// method.showMethod();
 		focusClass.addMethodList(method);
 		focusMethod = method;

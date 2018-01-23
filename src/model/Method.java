@@ -11,6 +11,8 @@ public class Method {
 	String declaringClassName;
 	String modifier;
 	String path;
+	int start;
+	int startLine = -1;
 	ArrayList<String> parametersList = new ArrayList<String>();
 	ArrayList<Method> methodCallList = new ArrayList<Method>();
 	Set<Method> methodCallSet = new HashSet<>();
@@ -20,6 +22,22 @@ public class Method {
 		this.declaringClassName = declaringClassName;
 		this.modifier = modifier;
 		this.path = null;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getStartLine() {
+		return startLine;
+	}
+
+	public void setStartLine(int startLine) {
+		this.startLine = startLine;
 	}
 
 	public String getMethodName() {
