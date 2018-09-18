@@ -8,10 +8,10 @@ import javax.swing.JPopupMenu;
 
 import model.Method;
 
-public class MyButtonListener extends MouseAdapter {
-	private JPopupMenu popup;
+public class ClassPanelButtonListener extends MouseAdapter {
+	public JPopupMenu popup;
 
-	public MyButtonListener(Method m) {
+	public ClassPanelButtonListener(Method m) {
 
 		popup = new JPopupMenu();
 		JMenuItem view1 = new JMenuItem("エディタに表示");

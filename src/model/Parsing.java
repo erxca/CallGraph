@@ -30,6 +30,7 @@ public class Parsing {
 		// IProject[] projects = root.getProjects();
 		IProject project = root.getProject(packageName);
 
+		System.out.println("path  : " + project.getLocation().toOSString());
 		// System.out.println(project.exists());
 		// System.out.println(projects.length);
 		// for (IProject project : projects) {
@@ -56,6 +57,7 @@ public class Parsing {
 			if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
 
 				System.out.println("Package Name : " + mypackage.getElementName());
+				visitor.setPackageName(mypackage.getElementName());
 				createAST(mypackage);
 			}
 
@@ -72,13 +74,32 @@ public class Parsing {
 			parse.accept(visitor);
 
 			// System.out.println("***\t\tEND\t\t***");
+			// メソッドの情報を編集する
 			for (Method method : visitor.methodList) {
 				if (method.getPath() == null) {
 					method.setPath(pkgPath);
 				}
+
+				// メソッド開始行のセット
 				if (method.getStartLine() < 0) {
-					method.setStartLine(parse.getLineNumber(method.start));
+					method.setStartLine(parse.getLineNumber(method.getStart()));
 				}
+				// if (method.getCalledLine() < 0) {
+				// method.setCalledLine(parse.getLineNumber(method.getCalledCharNum()));
+				// }
+
+				for (CalledLinelSet set : method.getCallLineList()) {
+					if (!set.isChanged()) {
+						// System.out.println(set.getMethodName() + " : " +
+						// parse.getLineNumber(set.getLineNum()));
+						set.setLineNum(parse.getLineNumber(set.getLineNum()));
+						set.setChanged(true);
+						// System.out.println(method.declaringClassName + " " +
+						// method.methodName + " "
+						// + set.getMethodName() + " " + set.getLineNum());
+					}
+				}
+
 			}
 		}
 	}
@@ -95,6 +116,7 @@ public class Parsing {
 							&& mthd.declaringClassName.equals(method2.declaringClassName)
 							&& mthd.parametersList.equals(method2.parametersList)) {
 
+						// System.out.println(method2.methodName);
 						method.methodCallList.set(method.methodCallList.indexOf(mthd), method2);
 						isExist = true;
 						break;

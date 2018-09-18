@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import controller.ClassPanelButtonListener;
 import model.Class;
 import model.Method;
 
@@ -91,7 +92,15 @@ public class MyClassPanel extends JPanel {
 
 	private void addMethodButtonWidth(Method method) {
 
-		MyMethodButton btn = new MyMethodButton(p, method, false, 0);
+		// MyMethodButton btn = new MyMethodButton(p, method, false, 0);
+		MyMethodButton btn;
+
+		if (method.isConstructor()) {
+			btn = new RoundedCornerButton(p, method, true, 0);
+		} else {
+			btn = new MyMethodButton(p, method, true, 0);
+		}
+		btn.addMouseListener(new ClassPanelButtonListener(method));
 		btnList.add(btn);
 		mWidth += btn.fm.stringWidth(method.getMethodName()) + 50;
 

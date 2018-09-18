@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
+import controller.GraphPanelButtonListener;
+import model.CalledLinelSet;
 import model.Method;
 
 public class MyGraphPanel extends JPanel {
@@ -30,7 +32,11 @@ public class MyGraphPanel extends JPanel {
 	Frame f;
 	MyClassPanel cp;
 	int level;
-	public Color colorList[] = { Color.pink, Color.yellow, Color.cyan, Color.magenta, Color.orange, Color.green };
+	// public Color colorList[] = { Color.pink, Color.yellow, Color.cyan,
+	// Color.magenta, Color.orange, Color.green };
+	public Color colorList[] = { new Color(255, 136, 255), new Color(136, 255, 255), new Color(255, 255, 100),
+			new Color(136, 136, 255), new Color(255, 165, 100), new Color(130, 200, 255), new Color(255, 75, 75),
+			new Color(130, 200, 130), new Color(200, 150, 200), new Color(75, 255, 75), new Color(225, 255, 75) };
 	private int colorNum = 0;
 
 	final int HALF_BTN_Y = 15;
@@ -94,15 +100,34 @@ public class MyGraphPanel extends JPanel {
 		}
 	}
 
-	public void makeCalledMethod(Set<Method> mSet, int centerX, double pY) {
+	public void makeCalledMethod(Method method, int centerX, double pY) {
 		level++;
 		int mWidth = 20;
-		for (Method m : mSet) {
+		Set<Method> mSet = method.getMethodCallSet();
 
-			MyMethodButton btn = new MyMethodButton(this, m, true, level);
+		for (Method m : mSet) {
+			MyMethodButton btn;
+
+			if (m.isConstructor()) {
+				btn = new RoundedCornerButton(this, m, true, level);
+			} else {
+				btn = new MyMethodButton(this, m, true, level);
+			}
+
+			for (CalledLinelSet set : method.getCallLineList()) {
+				if (set.getMethodName().equals(m.getMethodName())) {
+					btn.calledLineList.add(set.getLineNum());
+				}
+			}
 			checkSameMethod(btn);
 			nodeList.add(btn);
 			allNodeList.add(btn);
+
+			btn.addMouseListener(new GraphPanelButtonListener(method, m, btn.calledLineList));
+			// System.out.println(m.getMethodName());
+			// for (int i : btn.calledLineList) {
+			// System.out.println(i);
+			// }
 			mWidth += btn.fm.stringWidth(m.getMethodName()) + 50;
 
 		}

@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
-import controller.MyButtonListener;
 import model.Method;
 
 public class MyMethodButton extends JButton {
@@ -19,10 +19,13 @@ public class MyMethodButton extends JButton {
 	int level;
 	double pX, pY, myX, myY;
 	int colorNum = -1;
+	ArrayList<Integer> calledLineList = new ArrayList<Integer>();
 
 	final int P_METHOD_Y = 40;
 	final int HEIGHT = 30;
 	final int CLASS_PANEL_Y = 30;
+
+	boolean isLeaf = false;
 
 	public MyMethodButton(MyGraphPanel p, Method m, boolean isCalled, int level) {
 		String name = m.getMethodName();
@@ -32,7 +35,8 @@ public class MyMethodButton extends JButton {
 		setText(name);
 		setBackground(Color.white);
 		addAction();
-		addMouseListener(new MyButtonListener(m));
+		// addMouseListener(new MyButtonListener(m));
+		// setCallerPath();
 
 		fm = this.getFontMetrics(this.getFont());
 		nameWidth = fm.stringWidth(name);
@@ -61,19 +65,27 @@ public class MyMethodButton extends JButton {
 				p.removeBtn(level);
 				if (m.getMethodCallSet().size() == 0) {
 					setBorder(new LineBorder(Color.black, 2));
+					isLeaf = true;
 				}
 				if (level == 0) {
 					p.initList();
-					p.makeCalledMethod(m.getMethodCallSet(),
-							(int) (getBounds().getCenterX() + getParent().getBounds().getX()),
+					p.makeCalledMethod(m, (int) (getBounds().getCenterX() + getParent().getBounds().getX()),
 							getBounds().getMaxY() + getParent().getBounds().getY());
 				} else {
-					p.makeCalledMethod(m.getMethodCallSet(), (int) getBounds().getCenterX(), getBounds().getMaxY());
+					p.makeCalledMethod(m, (int) getBounds().getCenterX(), getBounds().getMaxY());
 				}
 			}
 
 		});
 	}
+
+	// private void setCallerPath() {
+	// for (Method method : m.getMethodCallList()) {
+	// method.setCallerClassPath(m.getPath());
+	// // System.out.println(method.getMethodName() + " " +
+	// // method.getCallerClassPath());
+	// }
+	// }
 
 	public boolean equals(MyMethodButton btn) {
 		if (this.m.equals(btn.getM())) {
@@ -128,6 +140,14 @@ public class MyMethodButton extends JButton {
 	public void setBgColor(int colorNum) {
 		setBackground(p.colorList[colorNum]);
 		this.colorNum = colorNum;
+	}
+
+	public ArrayList<Integer> getCalledLineList() {
+		return calledLineList;
+	}
+
+	public void setCalledLineList(ArrayList<Integer> calledLineList) {
+		this.calledLineList = calledLineList;
 	}
 
 }

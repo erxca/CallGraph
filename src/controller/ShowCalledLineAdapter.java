@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,18 +22,20 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
-import model.Method;
-
-public class MyButtonAdapter extends MouseAdapter {
-	Method m;
-	// int lineNum;
-	// String path;
+public class ShowCalledLineAdapter extends MouseAdapter {
+	ArrayList<Integer> calledLineList = new ArrayList<Integer>();
+	String path;
+	int listSize;
+	int now = 0; // 今見てる行のリストでの番号
 	IWorkbenchPage page;
 
-	public MyButtonAdapter(Method m) {
-		this.m = m;
-		// lineNum = m.getStartLine();
-		// path = m.getPath();
+	public ShowCalledLineAdapter(ArrayList<Integer> calledLineList, String path) {
+		// TODO Auto-generated constructor stub
+		this.calledLineList = calledLineList;
+		listSize = calledLineList.size();
+
+		this.path = path;
+		// System.out.println(path);
 	}
 
 	@Override
@@ -48,9 +51,13 @@ public class MyButtonAdapter extends MouseAdapter {
 				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 				page = window.getActivePage();
 				// openSorceCode(m.getPath());
-				openSorceCode(m.getPath());
+				openSorceCode(path);
 				// markLine(m.getStartLine(), page);
-				markLine(m.getStartLine(), page);
+				if (now == listSize) {
+					now = 0;
+				}
+				markLine(calledLineList.get(now), page);
+				now++;
 			}
 		});
 	}

@@ -11,11 +11,16 @@ public class Method {
 	String declaringClassName;
 	String modifier;
 	String path;
-	int start;
-	int startLine = -1;
+	// String callerClassPath = null;
+	int start; // メソッド開始位置（文字数）
+	int startLine = -1; // メソッド開始行
+	int calledCharNum; // 呼び出し開始位置
+	// int calledLine = -1;
+	boolean isConstructor = false;
 	ArrayList<String> parametersList = new ArrayList<String>();
 	ArrayList<Method> methodCallList = new ArrayList<Method>();
-	Set<Method> methodCallSet = new HashSet<>();
+	HashSet<Method> methodCallSet = new HashSet<>();
+	ArrayList<CalledLinelSet> callLineList = new ArrayList<CalledLinelSet>();
 
 	Method(String methodName, String declaringClassName, String modifier) {
 		this.methodName = methodName;
@@ -40,9 +45,41 @@ public class Method {
 		this.startLine = startLine;
 	}
 
+	public int getCalledCharNum() {
+		return calledCharNum;
+	}
+
+	public void setCalledCharNum(int calledLine) {
+		this.calledCharNum = calledLine;
+	}
+
+	// public int getCalledLine() {
+	// return calledLine;
+	// }
+	//
+	// public void setCalledLine(int calledLine) {
+	// this.calledLine = calledLine;
+	// }
+
 	public String getMethodName() {
 		return methodName;
 	}
+
+	public boolean isConstructor() {
+		return isConstructor;
+	}
+
+	public void setConstructor(boolean isConstructor) {
+		this.isConstructor = isConstructor;
+	}
+
+	// public String getCallerClassPath() {
+	// return callerClassPath;
+	// }
+	//
+	// public void setCallerClassPath(String callerClassPath) {
+	// this.callerClassPath = callerClassPath;
+	// }
 
 	public String getPath() {
 		return path;
@@ -71,6 +108,14 @@ public class Method {
 	public String getDeclaringClassName() {
 		return declaringClassName;
 	}
+
+	public ArrayList<CalledLinelSet> getCallLineList() {
+		return callLineList;
+	}
+
+	// public void setCallLineList(ArrayList<CalledLinelSet> callLineList) {
+	// this.callLineList = callLineList;
+	// }
 
 	public void list2Set() {
 		for (Method method : methodCallList) {
