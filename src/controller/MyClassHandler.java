@@ -13,6 +13,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import model.GetInformation;
+import model.Parsing;
 
 public class MyClassHandler extends AbstractHandler {
 	Shell shell = Display.getDefault().getActiveShell();
@@ -27,8 +28,8 @@ public class MyClassHandler extends AbstractHandler {
 		page = window.getActivePage();
 
 		try {
-			page.showView("org.eclipse.jdt.ui.PackageExplorer");
-			// System.out.println(HandlerUtil.getActivePartId(event));
+			page.showView("tool.test.views.ConfigurationView");
+			page.showView("tool.test.views.TestView");
 		} catch (PartInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,6 +52,9 @@ public class MyClassHandler extends AbstractHandler {
 	private void cmpProjectName(String projectName, IWorkbenchPage page) {
 		if (projectName.equals(MyProjectHandler.pjtName)) {
 			// System.out.println("一致！");
+
+			Parsing.olf.write("EXECUTE\tnormal visualization\t", className);
+
 			GetInformation info = new GetInformation();
 			info.getClassInfo(className, page);
 		} else {

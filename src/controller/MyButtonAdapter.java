@@ -22,17 +22,14 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import model.Method;
+import model.Parsing;
 
 public class MyButtonAdapter extends MouseAdapter {
 	Method m;
-	// int lineNum;
-	// String path;
 	IWorkbenchPage page;
 
 	public MyButtonAdapter(Method m) {
 		this.m = m;
-		// lineNum = m.getStartLine();
-		// path = m.getPath();
 	}
 
 	@Override
@@ -47,15 +44,15 @@ public class MyButtonAdapter extends MouseAdapter {
 				// System.out.println(path + " " + lineNum);
 				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 				page = window.getActivePage();
-				// openSorceCode(m.getPath());
 				openSorceCode(m.getPath());
-				// markLine(m.getStartLine(), page);
 				markLine(m.getStartLine(), page);
+
+				Parsing.olf.write("SOURCE\tdeclaration\t\t", m.getMethodName());
 			}
 		});
 	}
 
-	public void openSorceCode(String filePath) {
+	protected void openSorceCode(String filePath) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		IFile file = root.getFile(new Path(filePath));
@@ -69,7 +66,7 @@ public class MyButtonAdapter extends MouseAdapter {
 		}
 	}
 
-	private void markLine(int line, IWorkbenchPage page) {
+	protected void markLine(int line, IWorkbenchPage page) {
 		IEditorInput editorInput = page.getActiveEditor().getEditorInput();
 		IResource resource = (IResource) editorInput.getAdapter(IResource.class);
 
@@ -94,5 +91,6 @@ public class MyButtonAdapter extends MouseAdapter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 }

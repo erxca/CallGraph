@@ -8,11 +8,11 @@ import javax.swing.JPopupMenu;
 import model.Method;
 
 public class GraphPanelButtonListener extends ClassPanelButtonListener {
-	private JPopupMenu popup;
+	protected JPopupMenu popup;
 
-	public GraphPanelButtonListener(Method caller, Method m, ArrayList<Integer> calledLineList) {
+	public GraphPanelButtonListener(Method caller, Method callee, ArrayList<Integer> calledLineList) {
 
-		super(m);
+		super(callee);
 
 		popup = super.popup;
 		StringBuffer sb = new StringBuffer("呼び出し行を表示（");
@@ -20,7 +20,7 @@ public class GraphPanelButtonListener extends ClassPanelButtonListener {
 		sb.append("ヶ所）");
 		JMenuItem view2 = new JMenuItem(sb.toString());
 
-		view2.addMouseListener(new ShowCalledLineAdapter(calledLineList, caller.getPath()));
+		view2.addMouseListener(new ShowCalledLineAdapter(callee, calledLineList, caller.getPath()));
 		popup.add(view2);
 
 	}

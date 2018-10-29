@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 import model.Method;
+import model.Parsing;
 
 public class MyMethodButton extends JButton {
 	FontMetrics fm;
@@ -26,6 +27,7 @@ public class MyMethodButton extends JButton {
 	final int CLASS_PANEL_Y = 30;
 
 	boolean isLeaf = false;
+	boolean isFocused = false;
 
 	public MyMethodButton(MyGraphPanel p, Method m, boolean isCalled, int level) {
 		String name = m.getMethodName();
@@ -34,7 +36,7 @@ public class MyMethodButton extends JButton {
 		this.level = level;
 		setText(name);
 		setBackground(Color.white);
-		addAction();
+		// addAction();
 		// addMouseListener(new MyButtonListener(m));
 		// setCallerPath();
 
@@ -57,11 +59,12 @@ public class MyMethodButton extends JButton {
 		setMyXY(x + getBounds().getWidth() / 2, y);
 	}
 
-	private void addAction() {
+	public void addAction() {
 		addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Parsing.olf.write("PUSH\t" + m.getDeclaringClassName() + "." + m.getMethodName());
 				p.removeBtn(level);
 				if (m.getMethodCallSet().size() == 0) {
 					setBorder(new LineBorder(Color.black, 2));
@@ -79,13 +82,10 @@ public class MyMethodButton extends JButton {
 		});
 	}
 
-	// private void setCallerPath() {
-	// for (Method method : m.getMethodCallList()) {
-	// method.setCallerClassPath(m.getPath());
-	// // System.out.println(method.getMethodName() + " " +
-	// // method.getCallerClassPath());
-	// }
-	// }
+	public void emphasizeBorder() {
+		setBorder(new LineBorder(Color.red, 3, true));
+		setBorderPainted(true);
+	}
 
 	public boolean equals(MyMethodButton btn) {
 		if (this.m.equals(btn.getM())) {

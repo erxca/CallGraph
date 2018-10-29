@@ -17,7 +17,7 @@ public class ToolVisitor extends ASTVisitor {
 	public static ArrayList<Class> classList = new ArrayList<Class>(); // クラスをまとめたリスト
 	// メソッド呼び出しをまとめたリスト
 	ArrayList<ArrayList<String>> methodCallList = new ArrayList<ArrayList<String>>();
-	ArrayList<Method> methodList = new ArrayList<Method>();
+	static ArrayList<Method> methodList = new ArrayList<Method>();
 	Class focusClass = null; // 今見ているクラス。クラス宣言があるたびに変わる
 	Method focusMethod = null; // 今見ているメソッド。メソッド宣言があるたびに変わる
 
@@ -155,5 +155,9 @@ public class ToolVisitor extends ASTVisitor {
 		focusMethod.methodCallList.add(method);
 
 		return super.visit(node);
+	}
+
+	public static ArrayList<Method> getMethodList() {
+		return methodList;
 	}
 }

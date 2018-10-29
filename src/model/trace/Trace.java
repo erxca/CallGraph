@@ -1,7 +1,6 @@
 package model.trace;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -41,62 +40,12 @@ public class Trace {
 	/**
 	 * Parse the command line arguments. Launch target VM. Generate the trace.
 	 */
-	// Trace(String[] args) {
-	// PrintWriter writer = new PrintWriter(System.out);
-	// int inx = 0;
-	//
-	// // 以下オプション部分なので不要
-	// // for (inx = 0; inx < args.length; ++inx) {
-	// // String arg = args[inx];
-	// // if (arg.charAt(0) != '-') {
-	// // break;
-	// // }
-	// // if (arg.equals("-output")) {
-	// // try {
-	// // writer = new PrintWriter(new FileWriter(args[++inx]));
-	// // } catch (IOException exc) {
-	// // System.err.println("Cannot open output file: " + args[inx] + " - " +
-	// // exc);
-	// // System.exit(1);
-	// // }
-	// // } else if (arg.equals("-all")) {
-	// // excludes = new String[0];
-	// // } else if (arg.equals("-fields")) {
-	// // watchFields = true;
-	// // } else if (arg.equals("-dbgtrace")) {
-	// // debugTraceMode = Integer.parseInt(args[++inx]);
-	// // } else if (arg.equals("-help")) {
-	// // usage();
-	// // System.exit(0);
-	// // } else {
-	// // System.err.println("No option: " + arg);
-	// // usage();
-	// // System.exit(1);
-	// // }
-	// // }
-	// // if (inx >= args.length) {
-	// // System.err.println("<class> missing");
-	// // usage();
-	// // System.exit(1);
-	// // }
-	//
-	// // メインクラス名と引数をsbに格納
-	// StringBuffer sb = new StringBuffer();
-	// sb.append(args[inx]);
-	// for (++inx; inx < args.length; ++inx) {
-	// sb.append(' ');
-	// sb.append(args[inx]);
-	// }
-	//
-	// vm = launchTarget(null, sb.toString());
-	// generateTrace(writer);
-	// }
 
 	public Trace(String option, String args) {
-		PrintWriter writer = new PrintWriter(System.out);
 
 		vm = launchTarget(option, args);
-		generateTrace(writer);
+		generateTrace();
+
 	}
 
 	/**
@@ -107,9 +56,9 @@ public class Trace {
 	 * トレースを生成します。 イベントを有効にし、イベントを表示するスレッドを開始し、リモートエラーを転送してストリームを出力するスレッドを開始し、
 	 * リモートVMを再開し、最終イベントを待ってからシャットダウンします。
 	 */
-	void generateTrace(PrintWriter writer) {
+	void generateTrace() {
 		vm.setDebugTraceMode(debugTraceMode);
-		EventThread eventThread = new EventThread(vm, excludes, writer);
+		EventThread eventThread = new EventThread(vm, excludes);
 		eventThread.setEventRequests(watchFields);
 		eventThread.start();
 		redirectOutput();
@@ -123,7 +72,6 @@ public class Trace {
 		} catch (InterruptedException exc) {
 			// we don't interrupt
 		}
-		writer.close();
 	}
 
 	/**

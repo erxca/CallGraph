@@ -22,7 +22,7 @@ public class Method {
 	HashSet<Method> methodCallSet = new HashSet<>();
 	ArrayList<CalledLinelSet> callLineList = new ArrayList<CalledLinelSet>();
 
-	Method(String methodName, String declaringClassName, String modifier) {
+	public Method(String methodName, String declaringClassName, String modifier) {
 		this.methodName = methodName;
 		this.declaringClassName = declaringClassName;
 		this.modifier = modifier;
@@ -95,9 +95,14 @@ public class Method {
 		this.path = sb.toString();
 	}
 
+	public ArrayList<String> getParametersList() {
+		return parametersList;
+	}
+
 	public void addParaList(ITypeBinding[] paras) {
 		for (ITypeBinding itb : paras) {
-			parametersList.add(itb.getName());
+			parametersList.add(itb.getQualifiedName());
+			// System.out.println(itb.getQualifiedName());
 		}
 	}
 

@@ -13,11 +13,10 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-public class PluginView extends ViewPart {
+public class TraceView extends ViewPart {
 	ScrolledComposite scrollComposite;
 	Composite composite;
 	static Frame f;
-	// static JPanel p;
 	static JScrollPane scp;
 
 	@Override
@@ -29,23 +28,14 @@ public class PluginView extends ViewPart {
 		int viewW = screenSize.width;
 		int viewH = screenSize.height;
 
-		// p = new JPanel();
-		// p.setOpaque(false);
-		// p.setBackground(Color.white);
-		// p.setBounds(0, 0, viewW / 2, viewH / 2);
-
 		scp = new JScrollPane();
-		scp.getViewport().setView(new MyGraphPanel(null, f));
+		scp.getViewport().setView(new TraceGraphPanel(null, f));
 		scp.setBounds(0, 0, viewW / 2, viewH / 2);
 		scp.getViewport().setBackground(Color.white);
 
 		f.add(scp);
 
 	}
-
-	// public static JPanel getP() {
-	// return p;
-	// }
 
 	public static Frame getF() {
 		return f;

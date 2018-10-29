@@ -18,6 +18,10 @@ public class ClassPanelButtonListener extends MouseAdapter {
 		view1.addMouseListener(new MyButtonAdapter(m));
 		popup.add(view1);
 
+		JMenuItem view2 = new JMenuItem("ブレークポイントに設定");
+		view2.addMouseListener(new BpSettingAdapter(m));
+		popup.add(view2);
+
 	}
 
 	public void mouseReleased(MouseEvent e) {

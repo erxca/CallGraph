@@ -16,10 +16,14 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import controller.OutputLogFile;
+
 public class Parsing {
 	private static ToolVisitor visitor = new ToolVisitor();
 	static ArrayList<String> srcList = new ArrayList<String>();
+	static ArrayList<Method> methodList;
 	private static final String JDT_NATURE = "org.eclipse.jdt.core.javanature";
+	public static OutputLogFile olf;
 
 	public void getWorkspaceInfo(String packageName) throws JavaModelException {
 		// ワークスペースの参照を取得す る
@@ -29,6 +33,10 @@ public class Parsing {
 		// プロジェクトへの参照を取得する
 		// IProject[] projects = root.getProjects();
 		IProject project = root.getProject(packageName);
+
+		olf = new OutputLogFile(project.getLocation().toOSString() + "\\" + project.getName() + "_log.txt");
+
+		olf.write("EXECUTE\tstatic analysis\t\t", project.getName());
 
 		System.out.println("path  : " + project.getLocation().toOSString());
 		// System.out.println(project.exists());
@@ -64,6 +72,7 @@ public class Parsing {
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	private void createAST(IPackageFragment mypackage) throws JavaModelException {
 		String pkgPath = mypackage.getPath().toString();
 		for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
@@ -73,9 +82,11 @@ public class Parsing {
 
 			parse.accept(visitor);
 
+			methodList = visitor.getMethodList();
+
 			// System.out.println("***\t\tEND\t\t***");
 			// メソッドの情報を編集する
-			for (Method method : visitor.methodList) {
+			for (Method method : methodList) {
 				if (method.getPath() == null) {
 					method.setPath(pkgPath);
 				}
@@ -105,13 +116,13 @@ public class Parsing {
 	}
 
 	private void checkMethodCallList() {
-		for (Method method : visitor.methodList) { // 各メソッドのメソッド呼び出しリストをチェック。メソッドリストに一致するものがあれば入れ替える
+		for (Method method : methodList) { // 各メソッドのメソッド呼び出しリストをチェック。メソッドリストに一致するものがあれば入れ替える
 			java.util.Iterator<Method> itr = method.methodCallList.iterator();
 			while (itr.hasNext()) {
 				Method mthd = itr.next();
 
 				boolean isExist = false;
-				for (Method method2 : visitor.methodList) {
+				for (Method method2 : methodList) {
 					if (mthd.methodName.equals(method2.methodName)
 							&& mthd.declaringClassName.equals(method2.declaringClassName)
 							&& mthd.parametersList.equals(method2.parametersList)) {

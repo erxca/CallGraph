@@ -48,7 +48,15 @@ class RoundedCornerButton extends MyMethodButton {
 		}
 	}
 
-	private void paintFocusAndRollover(Graphics2D g2, Color color) {
+	// private void paintFocusAndRollover(Graphics2D g2, Color color) {
+	// g2.setPaint(new GradientPaint(0, 0, color, getWidth() - 1, getHeight() -
+	// 1, color.brighter(), true));
+	// g2.fill(shape);
+	// g2.setColor(getBackground());
+	// g2.fill(border);
+	// }
+
+	private void enphazizeBorder(Graphics2D g2, Color color) {
 		g2.setPaint(new GradientPaint(0, 0, color, getWidth() - 1, getHeight() - 1, color.brighter(), true));
 		g2.fill(shape);
 		g2.setColor(getBackground());
@@ -64,12 +72,15 @@ class RoundedCornerButton extends MyMethodButton {
 			g2.setColor(rc);
 			g2.fill(shape);
 		} else if (isRolloverEnabled() && getModel().isRollover()) {
-			paintFocusAndRollover(g2, rc);
+			enphazizeBorder(g2, rc);
 			// } else if (hasFocus()) {
 			// paintFocusAndRollover(g2, rc);
 		} else {
 			g2.setColor(getBackground());
 			g2.fill(shape);
+		}
+		if (isFocused) {
+			enphazizeBorder(g2, Color.red);
 		}
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g2.setColor(getBackground());

@@ -27,7 +27,8 @@ public class MyGraphPanel extends JPanel {
 	int viewW = screenSize.width;
 	int viewH = screenSize.height;
 	ArrayList<MyMethodButton> nodeList = new ArrayList<MyMethodButton>(); // クラスパネル内のメソッドを含めない
-	ArrayList<MyMethodButton> allNodeList = new ArrayList<MyMethodButton>(); // クラスパネル内のメソッドを含める
+	// ArrayList<MyMethodButton> allNodeList = new ArrayList<MyMethodButton>();
+	// // クラスパネル内のメソッドを含める
 	IWorkbenchPage page;
 	Frame f;
 	MyClassPanel cp;
@@ -76,7 +77,7 @@ public class MyGraphPanel extends JPanel {
 		this.level = level;
 	}
 
-	private void changeBgColor(MyMethodButton btn) {
+	protected void changeBgColor(MyMethodButton btn) {
 		ArrayList<MyMethodButton> sameMethod = new ArrayList<MyMethodButton>();
 		for (MyMethodButton mNode : nodeList) {
 			if (btn.equals(mNode)) {
@@ -93,7 +94,7 @@ public class MyGraphPanel extends JPanel {
 
 	public void initList() {
 		nodeList.clear();
-		allNodeList.clear();
+		// allNodeList.clear();
 
 		for (MyMethodButton btn : cp.btnList) {
 			nodeList.add(btn);
@@ -113,6 +114,7 @@ public class MyGraphPanel extends JPanel {
 			} else {
 				btn = new MyMethodButton(this, m, true, level);
 			}
+			btn.addAction();
 
 			for (CalledLinelSet set : method.getCallLineList()) {
 				if (set.getMethodName().equals(m.getMethodName())) {
@@ -121,7 +123,7 @@ public class MyGraphPanel extends JPanel {
 			}
 			checkSameMethod(btn);
 			nodeList.add(btn);
-			allNodeList.add(btn);
+			// allNodeList.add(btn);
 
 			btn.addMouseListener(new GraphPanelButtonListener(method, m, btn.calledLineList));
 			// System.out.println(m.getMethodName());
@@ -140,7 +142,7 @@ public class MyGraphPanel extends JPanel {
 		repaint();
 	}
 
-	private void checkLeftEnd(int centerX, double pY, int mWidth) { // 左端がはみ出ていないかチェックしてノードを配置
+	protected void checkLeftEnd(int centerX, double pY, int mWidth) { // 左端がはみ出ていないかチェックしてノードを配置
 		int btnX = (btnX = centerX - (mWidth + 10) / 2 + 20) > 0 ? btnX : 20;
 
 		for (MyMethodButton btn : nodeList) {
@@ -153,14 +155,14 @@ public class MyGraphPanel extends JPanel {
 		}
 	}
 
-	private void checkRightEnd(int centerX, double pY, int mWidth) { // 右端がはみ出ていないかチェック
+	protected void checkRightEnd(int centerX, double pY, int mWidth) { // 右端がはみ出ていないかチェック
 		int methodRightEnd = centerX + mWidth / 2 + 20;
 		if (methodRightEnd > getWidth()) {
 			setPreferredSize(new Dimension(methodRightEnd, getHeight()));
 		}
 	}
 
-	private void checkSameMethod(MyMethodButton m) {
+	protected void checkSameMethod(MyMethodButton m) {
 		for (MyMethodButton node : nodeList) {
 			if (m.equals(node)) {
 				int nCnum;

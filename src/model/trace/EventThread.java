@@ -33,7 +33,7 @@
 
 package model.trace;
 
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,6 @@ import com.sun.jdi.Field;
 import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VMDisconnectedException;
-import com.sun.jdi.Value;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.event.ClassPrepareEvent;
 import com.sun.jdi.event.Event;
@@ -68,6 +67,9 @@ import com.sun.jdi.request.ModificationWatchpointRequest;
 import com.sun.jdi.request.StepRequest;
 import com.sun.jdi.request.ThreadDeathRequest;
 
+import model.Method;
+import model.ToolVisitor;
+
 /**
  * This class processes incoming JDI events and displays them
  *
@@ -77,22 +79,30 @@ public class EventThread extends Thread {
 
 	private final VirtualMachine vm; // Running VM
 	private final String[] excludes; // Packages to exclude
-	private final PrintWriter writer; // Where output goes
+	// private final PrintWriter writer; // Where output goes
 
 	static String nextBaseIndent = ""; // Starting indent for next thread
 
 	private boolean connected = true; // Connected to VM
 	private boolean vmDied = true; // VMDeath occurred
 
+	ArrayList<Method> methodList = ToolVisitor.getMethodList();
+	static ArrayList<CallerAndCallee> traceList = new ArrayList<CallerAndCallee>();
+	ArrayList<Method> stack = new ArrayList<Method>();
+	Method caller = null;
+
 	// Maps ThreadReference to ThreadTrace instances
 	// ThreadReferenceをThreadTraceインスタンスにマップする
 	private Map<ThreadReference, ThreadTrace> traceMap = new HashMap<>();
 
-	EventThread(VirtualMachine vm, String[] excludes, PrintWriter writer) {
+	EventThread(VirtualMachine vm, String[] excludes) {
 		super("event-handler");
 		this.vm = vm;
 		this.excludes = excludes;
-		this.writer = writer;
+	}
+
+	public static ArrayList<CallerAndCallee> getTraceList() {
+		return traceList;
 	}
 
 	/**
@@ -112,6 +122,19 @@ public class EventThread extends Thread {
 					handleEvent(it.nextEvent());
 				}
 				eventSet.resume(); // このイベントセットによって中断されたスレッドを再開する
+
+				// for (CallerAndCallee cac : traceList) {
+				// if (cac.caller == null) {
+				// System.out.println("start " + " --> " +
+				// cac.getCallee().getMethodName());
+				// } else if (cac.callee == null) {
+				// System.out.println(cac.getCaller().getMethodName() + " --> "
+				// + "end");
+				// } else {
+				// System.out.println(cac.getCaller().getMethodName() + " --> "
+				// + cac.getCallee().getMethodName());
+				// }
+				// }
 			} catch (InterruptedException exc) {
 				// Ignore
 			} catch (VMDisconnectedException discExc) {
@@ -187,27 +210,72 @@ public class EventThread extends Thread {
 		}
 
 		private void println(String str) {
-			writer.print(indent);
-			writer.println(str);
+			System.out.println(str);
 		}
 
+		// メソッドに入るところ
 		void methodEntryEvent(MethodEntryEvent event) {
-			println(event.method().name() + "  --  " + event.method().declaringType().name());
-			indent.append("| ");
+			String methodName = event.method().name();
+			String className = event.method().declaringType().name();
+			ArrayList<String> paraList = new ArrayList<String>();
+
+			for (String s : event.method().argumentTypeNames()) {
+				paraList.add(s);
+			}
+			// println(event.method().name() + " -- " +
+			// event.method().declaringType().name());
+			// indent.append("| ");
+			// println(methodName + "\t" + className);
+			// for (String s : paraList) {
+			// println("\t" + s);
+			// }
+
+			// 呼び出し元はスタックの一番上のメソッド
+			if (!stack.isEmpty()) {
+				caller = stack.get(stack.size() - 1);
+			}
+
+			// println("method " + methodName);
+
+			if (methodName.equals("<init>")) {
+				methodName = className.substring(className.lastIndexOf(".") + 1);
+			}
+
+			for (Method m : methodList) {
+				if (m.getMethodName().equals(methodName) && m.getDeclaringClassName().equals(className)
+						&& m.getParametersList().equals(paraList)) {
+
+					traceList.add(new CallerAndCallee(caller, m, true));
+					// if (!stack.isEmpty()) {
+					// println("\t" + caller.getMethodName() + "--" +
+					// m.getMethodName());
+					// } else {
+					// println("\t\t--" + m.getMethodName());
+					// }
+					stack.add(m);
+				}
+			}
+
 		}
 
+		// メソッドから抜け出すところ
 		void methodExitEvent(MethodExitEvent event) {
-			indent.setLength(indent.length() - 2);
+			// indent.setLength(indent.length() - 2);
+			if (stack.size() > 1) {
+				traceList.add(new CallerAndCallee(stack.get(stack.size() - 1), stack.get(stack.size() - 2), false));
+			}
+			stack.remove(stack.size() - 1);
 		}
 
 		void fieldWatchEvent(ModificationWatchpointEvent event) {
-			Field field = event.field();
-			Value value = event.valueToBe();
-			println("    " + field.name() + " = " + value);
+			// Field field = event.field();
+			// Value value = event.valueToBe();
+			// println(" " + field.name() + " = " + value);
 		}
 
 		void exceptionEvent(ExceptionEvent event) {
-			println("Exception: " + event.exception() + " catch: " + event.catchLocation());
+			// println("Exception: " + event.exception() + " catch: " +
+			// event.catchLocation());
 
 			// Step to the catch
 			EventRequestManager mgr = vm.eventRequestManager();
@@ -235,9 +303,10 @@ public class EventThread extends Thread {
 		}
 
 		void threadDeathEvent(ThreadDeathEvent event) {
-			indent = new StringBuffer(baseIndent);
-			println("====== " + thread.name() + " end ======");
+			// indent = new StringBuffer(baseIndent);
+			// println("====== " + thread.name() + " end ======");
 		}
+
 	}
 
 	/**
@@ -309,7 +378,7 @@ public class EventThread extends Thread {
 	}
 
 	private void vmStartEvent(VMStartEvent event) {
-		writer.println("-- VM Started --");
+		System.out.println("-- VM Started --");
 	}
 
 	// Forward event for thread specific processing
@@ -364,13 +433,13 @@ public class EventThread extends Thread {
 
 	public void vmDeathEvent(VMDeathEvent event) {
 		vmDied = true;
-		writer.println("-- The application exited --");
+		System.out.println("-- The application exited --");
 	}
 
 	public void vmDisconnectEvent(VMDisconnectEvent event) {
 		connected = false;
 		if (!vmDied) {
-			writer.println("-- The application has been disconnected --");
+			System.out.println("-- The application has been disconnected --");
 		}
 	}
 }

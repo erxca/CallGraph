@@ -2,41 +2,91 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            name="%category.name"
-            id="tool.test">
-      </category>
-      <view
-            name="メソッド呼び出し可視化"
-            icon="icons/sample.gif"
-            category="tool.test"
-            class="view.PluginView"
-            id="tool.test.views.TestView">
-      </view>
-   </extension>
+	<extension
+		point="org.eclipse.ui.views">
+		<view
+        allowMultiple="false"
+        class="view.PluginView"
+        icon="icons/sample.gif"
+        id="tool.test.views.TestView"
+        name="メソッド呼び出し可視化">
+		</view>
+	</extension>
    
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               ratio="0.5"
-               relative="org.eclipse.ui.views.ProblemView"
-               relationship="right"
-               id="tool.test.views.TestView">
-         </view>
-         
-      </perspectiveExtension>
-   </extension>
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+			targetID="org.eclipse.jdt.ui.JavaPerspective">
+			<view
+				ratio="0.5"
+				relative="org.eclipse.ui.views.ProblemView"
+				relationship="right"
+				standalone="true"
+				id="tool.test.views.TestView">
+			</view>
+		</perspectiveExtension>
+	</extension>
    
-   <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
-   </extension>
+   
+	<extension
+		point="org.eclipse.ui.views">
+		<view
+        allowMultiple="false"
+        class="view.TraceView"
+        icon="icons/sample.gif"
+        id="tool.test.views.TraceView"
+        name="実行履歴可視化">
+		</view>
+	</extension>
+   
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+			targetID="org.eclipse.jdt.ui.JavaPerspective">
+			<view
+				ratio="0.5"
+				relative="tool.test.views.TestView"
+				relationship="right"
+				standalone="true"
+				id="tool.test.views.TraceView">
+			</view>
+		</perspectiveExtension>
+	</extension>
+   
+
+
+	<extension
+		point="org.eclipse.ui.views">
+		<view
+        allowMultiple="false"
+        class="view.ConfigurationView"
+        icon="icons/sample.gif"
+        id="tool.test.views.ConfigurationView"
+        name="実行履歴による可視化実行時設定">
+		</view>
+	</extension>
+   
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+			targetID="org.eclipse.jdt.ui.JavaPerspective">
+			<view
+				ratio="0.5"
+				relative="tool.test.views.TraceView"
+				relationship="right"
+				standalone="true"
+				id="tool.test.views.ConfigurationView">
+			</view>
+		</perspectiveExtension>
+	</extension>
+   
+   
+	<extension
+		point="org.eclipse.help.contexts">
+		<contexts
+			file="contexts.xml">
+		</contexts>
+	</extension>
    
    
 	<extension point="org.eclipse.ui.commands">
@@ -69,6 +119,7 @@
 		</menuContribution>
 	</extension>
 
+
 	<extension point="org.eclipse.ui.commands">
 		<command  
 			id="makeGraph" name="メソッド呼び出しを可視化する"/>
@@ -99,6 +150,7 @@
 		</menuContribution>
 	</extension>
 
+
 	<extension point="org.eclipse.ui.commands">
 		<command  
 			id="trace" name="トレース実行を可視化する"/>
@@ -126,6 +178,82 @@
 					</with>
 				</visibleWhen>
 			</command>
+		</menuContribution>
+	</extension>
+	
+	
+	
+	<extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="ツールバー拡張"
+            id="toolBar.category">
+      </category>
+      <command
+            name="ツールバーコマンド"
+            categoryId="toolBar.category"
+            id="traceVisualizeToolbar">
+      </command>
+   </extension>
+	
+	 <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="traceVisualizeToolbar"
+            class="controller.StartFromLeadHandler">
+      </handler>
+   </extension>
+	
+	<extension
+		point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+			<toolbar
+				id="trace.toolbar">
+				<command
+					commandId="traceVisualizeToolbar"
+					icon="icons/play-1173551_640.png"
+					tooltip="実行履歴を再生する"
+					id="traceVisualize">
+				</command>
+			</toolbar>
+		</menuContribution>
+	</extension>
+	
+	<extension
+         point="org.eclipse.ui.commands">
+		<category
+            name="ツールバー拡張"
+            id="toolBar.category">
+		</category>
+		<command
+            name="ツールバーコマンド"
+            categoryId="toolBar.category"
+            id="traceVisualizeToolbar2">
+		</command>
+	</extension>
+	
+	<extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="traceVisualizeToolbar2"
+            class="controller.StartFromBreakpointHandler">
+      </handler>
+   </extension>
+	
+	<extension
+		point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+			<toolbar
+				id="trace.toolbar">
+				<command
+					commandId="traceVisualizeToolbar2"
+					icon="icons/play2.png"
+					tooltip="実行履歴をブレークポイントから再生する"
+					id="traceVisualize">
+				</command>
+			</toolbar>
 		</menuContribution>
 	</extension>
 

@@ -18,7 +18,6 @@ public class MyProjectHandler extends AbstractHandler {
 		// TODO Auto-generated method stub
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
 		String sel = selection.toString();
-		// System.out.println(sel);
 
 		int idx;
 		if ((idx = sel.indexOf("\n")) > 0) {

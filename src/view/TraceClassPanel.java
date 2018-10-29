@@ -1,53 +1,51 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Frame;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 import controller.ClassPanelButtonListener;
 import model.Class;
 import model.Method;
 
-public class MyClassPanel extends JPanel {
-	Frame f;
-	MyGraphPanel p;
-	Class c;
-	JLabel lbl;
-	int width, mWidth, cWidth, cHeight;
-	int panelX;
-	ArrayList<MyMethodButton> btnList = new ArrayList<MyMethodButton>();
-	FontMetrics btnFm;
+public class TraceClassPanel extends MyClassPanel {
+	// Frame f;
+	// MyGraphPanel p;
+	// Class c;
+	// JLabel lbl;
+	// int width, mWidth, cWidth, cHeight;
+	// int panelX;
+	// ArrayList<MyMethodButton> btnList = new ArrayList<MyMethodButton>();
+	// FontMetrics btnFm;
 
-	public MyClassPanel(Frame f, MyGraphPanel p, Class c) {
-		this.f = f;
-		this.p = p;
-		this.c = c;
-
-		initVariable();
-		initPanel();
+	public TraceClassPanel(Frame f, MyGraphPanel p, Class c) {
+		// this.f = f;
+		// this.p = p;
+		// this.c = c;
+		//
+		// initVariable();
+		// initPanel();
 		// makePanel();
+		super(f, p, c);
+
 	}
 
-	private void initVariable() {
-		width = 0;
-		mWidth = 0;
-		cWidth = 0;
-	}
-
-	private void initPanel() {
-		setName("classPanel");
-		setOpaque(false);
-		setBorder(new LineBorder(Color.BLACK, 1));
-		setBackground(Color.white);
-		setLayout(null);
-	}
-
+	// private void initVariable() {
+	// width = 0;
+	// mWidth = 0;
+	// cWidth = 0;
+	// }
+	//
+	// private void initPanel() {
+	// setName("classPanel");
+	// setOpaque(false);
+	// setBorder(new LineBorder(Color.BLACK, 1));
+	// setBackground(Color.white);
+	// setLayout(null);
+	// }
+	//
 	public void makePanel() {
 
 		calcWidth();
@@ -98,13 +96,13 @@ public class MyClassPanel extends JPanel {
 		if (method.isConstructor()) {
 			btn = new RoundedCornerButton(p, method, true, 0);
 		} else {
-			btn = new MyMethodButton(p, method, true, 0);
+			btn = new TraceButton(p, method, true, 0);
 		}
-		btn.addAction();
 		btn.addMouseListener(new ClassPanelButtonListener(method));
 		btnList.add(btn);
 		mWidth += btn.fm.stringWidth(method.getMethodName()) + 50;
 
+		((TraceGraphPanel) p).setBorder(btn.getBorder());
 	}
 
 	private void paintPmethodButton() {

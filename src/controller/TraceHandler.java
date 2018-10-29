@@ -8,12 +8,19 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import model.Parsing;
 import model.trace.Trace;
+import model.trace.TraceVisualize;
+import view.ConfigurationView;
 
 public class TraceHandler extends AbstractHandler {
 
@@ -21,28 +28,83 @@ public class TraceHandler extends AbstractHandler {
 	private String classpath, classname, mainclass, projectname, projectpath;
 	private String args = "";
 	private String option, mainargs; // -classpath "メインクラスファイルのある場所のパス" 引数
+	public static IWorkbenchPage page;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getActiveMenuSelectionChecked(event);
 		String sel = selection.toString();
-		// System.out.println(sel);
 
-		initialSetting(sel);
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+		page = window.getActivePage();
 
-		MyTraceDialog dialog = new MyTraceDialog(shell);
-		int ret = dialog.open();
+		System.out.println(sel);
 
-		// System.out.println(pjtName);
-		if (ret == IDialogConstants.OK_ID) {
-			// [OK]ボタン押下
-			// args = dialog.getArgs();
-			// System.out.println(args);
-			//
-			// Trace呼ぶ
-			new Trace(option, mainargs);
-			// } else if (ret == IDialogConstants.CANCEL_ID) {
-			// // [Cancel]ボタン押下
+		if (sel.indexOf("main(String[])") < 0) {
+			MessageDialog.openInformation(shell, "error", "mainメソッドがありません。\nmainメソッドのあるクラスを選択してください。");
+
+		} else {
+
+			initialSetting(sel);
+
+			if (projectname.equals(MyProjectHandler.pjtName)) {
+
+				MyTraceDialog dialog = new MyTraceDialog(shell);
+				int ret = dialog.open();
+
+				try {
+					page.showView("tool.test.views.ConfigurationView");
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// System.out.println(pjtName);
+				if (ret == IDialogConstants.OK_ID) {
+					// [OK]ボタン押下
+					Parsing.olf.write("EXECUTE\ttrace vizualization\t", classname);
+					StartFromLeadHandler.traceNum = 0;
+					StartFromBreakpointHandler.traceNum = 0;
+
+					String mainPara = ConfigurationView.getParaTf().getText();
+					if (!ConfigurationView.getParaTf().getText().equals("")) {
+						StringBuffer masb = new StringBuffer();
+
+						masb.append(mainargs);
+						masb.append(" ");
+						masb.append(mainPara);
+
+						mainargs = masb.toString();
+
+					}
+
+					// Trace呼ぶ
+					try {
+						page.showView("tool.test.views.TraceView");
+					} catch (PartInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					new Trace(option, mainargs);
+
+					TraceVisualize tv = new TraceVisualize();
+					tv.visualize(classname, page);
+					StartFromLeadHandler.start = true;
+					StartFromBreakpointHandler.start = true;
+				} else if (ret == IDialogConstants.CANCEL_ID) {
+					// [Cancel]ボタン押下
+					try {
+						page.showView("tool.test.views.ConfigurationView");
+					} catch (PartInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			} else {
+				// System.err.println("構文解析をしてください。");
+				MessageDialog.openInformation(shell, "error", "構文解析結果がありません。\n構文解析を行ってください。");
+			}
 		}
 
 		return null;
@@ -56,6 +118,7 @@ public class TraceHandler extends AbstractHandler {
 		IWorkspaceRoot root = workspace.getRoot();
 
 		IProject project = root.getProject(projectname);
+		System.out.println(project.getName());
 		projectpath = project.getLocation().toOSString();
 		// System.out.println("path : " + project.getLocation().toOSString());
 
@@ -74,6 +137,7 @@ public class TraceHandler extends AbstractHandler {
 	}
 
 	private void setProjectName(String sel) {
+		sel = sel.substring(sel.indexOf(".java"));
 		int idx = sel.indexOf("]");
 		projectname = sel.substring(1, idx);
 
